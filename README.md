@@ -6,8 +6,11 @@ ___
 
 # PathoPatch:
 ## Accelerating Artificial Intelligence Based Whole Slide Image Analysis with an Optimized Preprocessing Pipeline
+
 <div align="center">
+
 [Installation](#installation) • [Usage](#usage) • [Examples](#examples) • [Roadmap](#Roadmap) • [Citation](#Citation)
+
 </div>
 
 ---
