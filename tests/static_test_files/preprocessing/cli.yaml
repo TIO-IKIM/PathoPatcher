@@ -1,0 +1,23 @@
+# dataset paths
+wsi_paths: /homes/fhoerst/histo-projects/DigitalHistologyHub/test_database/input/WSI
+output_path: /homes/fhoerst/histo-projects/DigitalHistologyHub/test_database/output/debug
+wsi_extensions: svs
+
+# basic setups
+downsample: 0
+check_resolution: False
+processes: 8
+
+# annotation specific settings
+annotation_paths: /homes/fhoerst/histo-projects/DigitalHistologyHub/test_database/input/Multiclass-Annotations
+annotation_extension: json
+label_map_file: /homes/fhoerst/histo-projects/DigitalHistologyHub/test_database/input/label_map.json
+
+# macenko stain normalization
+normalize_stains: False
+
+# finding patches
+max_background_ratio: 0.99
+
+# other
+log_level: debug

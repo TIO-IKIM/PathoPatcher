@@ -1,0 +1,34 @@
+# dataset paths
+wsi_paths: ./test_database/input/WSI
+output_path: ./tests/output/patch_extraction
+wsi_extensions: svs
+
+# basic setups
+downsample: 1
+check_resolution: False
+target_mag: 5
+patches_per_batch: 5
+processes: 32
+overwrite: True
+context_scales:
+  - 2
+  - 4
+  - 8
+
+# annotation specific settings
+annotation_paths: ./test_database/input/Multiclass-Annotations
+annotation_extension: json
+label_map_file: ./test_database/input/label_map.json
+store_masks: True
+
+# macenko stain normalization
+normalize_stains: True
+normalization_vector_json: ./tests/static_test_files/preprocessing/macenko/result/test_macenko.json
+
+# finding patches
+min_intersection_ratio: 0.05
+masked_otsu: True
+otsu_annotation: "Tissue-Annotation"
+
+# other
+log_level: debug

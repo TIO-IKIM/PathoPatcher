@@ -1,0 +1,9 @@
+{
+    "Background": 0,
+    "Tissue": 1,
+    "Tumor_vital": 2,
+    "mark": 3,
+    "Makrophage": 4,
+    "Cyst": 5,
+    "ROI": 6
+}

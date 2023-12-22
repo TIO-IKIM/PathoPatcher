@@ -1,0 +1,17 @@
+# dataset paths
+wsi_path: ./test_database/input/WSI/CMU-1-Small-Region.svs
+wsi_extensions: svs
+save_json_path: ./tests/output/macenko/test_macenko.json
+
+# basic setups
+downsample: 1
+
+# annotation specific settings
+label_map_file: ./test_database/input/label_map.json
+store_masks: True
+
+# finding patches
+min_intersection_ratio: 0.05
+
+# other
+log_level: info

@@ -1,0 +1,20 @@
+# Cache
+__pycache__/
+.DS_Store
+
+# files
+*.svs
+*.tiff
+*.tif
+example
+example_intern
+notebooks
+
+# local configs
+.vscode
+Tissue-Classifier-Data
+tests_backup
+tests/static_test_files/preprocessing/basic
+tests/static_test_files/preprocessing/complex_annotation
+tests/static_test_files/preprocessing/custom
+tests/static_test_files/preprocessing/overlap
