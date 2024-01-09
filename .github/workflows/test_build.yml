@@ -22,20 +22,16 @@ jobs:
         shell: bash -l {0}
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Conda environment
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          miniconda-version: "latest"
-          channels: conda-forge, defaults
-          python-version: 3.10.12
-          environment-file: environment.yaml
-          activate-environment: pathopatch_env_fork
-          use-only-tar-bz2: true  # IMPORTANT: This needs to be set for caching to work properly!
-          auto-update-conda: true
-          auto-activate-base: false
-    #- name: Install dependencies
-    #  run: |
-    #   $CONDA/bin/conda env update --file environment.yaml --name base
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        miniconda-version: "latest"
+        channels: conda-forge, defaults
+        python-version: 3.10.12
+        environment-file: environment.yaml
+        activate-environment: pathopatch_env_fork
+        use-only-tar-bz2: true  # IMPORTANT: This needs to be set for caching to work properly!
+        auto-update-conda: true
+        auto-activate-base: false
     - name : Run CLI Tests
       run: python -m pytest ./tests/test_cli
     - name : Run Core Tests
