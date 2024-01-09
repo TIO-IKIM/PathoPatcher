@@ -1,10 +1,9 @@
-name: pathopatch_env
+name: pathopatch_env_fork
 channels:
   - conda-forge
   - defaults
 dependencies:
   - python=3.10.12
-  - libtiff=4.5.0
   - openslide=3.4.1
   - pip=23.0
   - python-javabridge
@@ -42,6 +41,7 @@ dependencies:
     - pre-commit==3.0.3
     - pydantic==1.10.4
     - pyjwt==2.6.0
+    - pytest==7.4.4
     - rasterio==1.3.5.post1
     - schema==0.7.5
     - scikit-image==0.19.3
