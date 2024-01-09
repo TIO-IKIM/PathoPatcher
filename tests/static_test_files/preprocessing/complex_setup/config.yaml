@@ -1,6 +1,6 @@
 # dataset paths
-wsi_paths: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/test_database/input/WSI/CMU-1-Small-Region.svs
-output_path: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/output/debug/complex_setup
+wsi_paths: ./test_database/input/WSI/CMU-1-Small-Region.svs
+output_path: ./tests/tmp_results_folder/complex_setup
 wsi_extensions: svs
 
 # basic setups
