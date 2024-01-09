@@ -48,5 +48,6 @@ class TestMacenkoLoading(unittest.TestCase):
         assert_array_equal(correc_values["stain_vectors"], stain_vectors)
         assert_array_equal(correc_values["max_sat"], max_sat)
 
+
 if __name__ == "__main__":
     unittest.main()

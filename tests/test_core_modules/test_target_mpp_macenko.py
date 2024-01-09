@@ -1,14 +1,11 @@
-from cgi import test
-import json
 import os
 import shutil
-from tkinter import NO
 import unittest
 from pathlib import Path
 
 import numpy as np
 import yaml
-from numpy.testing import assert_almost_equal, assert_array_equal
+from numpy.testing import assert_almost_equal
 from PIL import Image
 
 from pathopatcher.cli import PreProcessingConfig, PreProcessingYamlConfig
@@ -20,12 +17,14 @@ from test_database.download import check_test_database
 
 class TestPreProcessorDownsample(unittest.TestCase):
     """Test the PreProcessor Module with downsample (default) parameter setup"""
-    
+
     @classmethod
-    def setUpClass(cls) -> None:    
+    def setUpClass(cls) -> None:
         """Setup configuration"""
         check_test_database()
-        cls.config = "./tests/static_test_files/preprocessing/target_mpp_macenko/config.yaml"        
+        cls.config = (
+            "./tests/static_test_files/preprocessing/target_mpp_macenko/config.yaml"
+        )
         with open(cls.config, "r") as config_file:
             yaml_config = yaml.safe_load(config_file)
             yaml_config = PreProcessingYamlConfig(**yaml_config)
@@ -33,12 +32,12 @@ class TestPreProcessorDownsample(unittest.TestCase):
         opt_dict = dict(yaml_config)
         cls.opt_dict = {k: v for k, v in opt_dict.items() if v is not None}
         cls.configuration = PreProcessingConfig(**cls.opt_dict)
-        
+
         cls.gt_folder = Path(
             "./tests/static_test_files/preprocessing/target_mpp_macenko/results/"
         ).resolve()
         cls.wsi_name = "CMU-1-Small-Region"
-        
+
         preprocess_logger = Logger(
             level=cls.configuration.log_level.upper(),
             log_dir=cls.configuration.log_path,
@@ -88,11 +87,16 @@ class TestPreProcessorDownsample(unittest.TestCase):
 
     def test_macenko_patch(self) -> None:
         """Test if Macenko worked correctly"""
-        gt_path = self.gt_folder / self.wsi_name / "patches" / "CMU-1-Small-Region_1_1.png"
+        gt_path = (
+            self.gt_folder / self.wsi_name / "patches" / "CMU-1-Small-Region_1_1.png"
+        )
         gt_image = np.array(Image.open(gt_path.resolve()))
 
         test_path = (
-            self.slide_processor.config.output_path / self.wsi_name / "patches" / "CMU-1-Small-Region_1_1.png"
+            self.slide_processor.config.output_path
+            / self.wsi_name
+            / "patches"
+            / "CMU-1-Small-Region_1_1.png"
         )
         test_image = np.array(Image.open(test_path.resolve()))
         assert_almost_equal(test_image, gt_image)

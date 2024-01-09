@@ -1,15 +1,21 @@
 import unittest
 import pandas as pd
 from pathlib import Path
-from typing import Union
 from pathopatcher.utils.file_handling import load_wsi_files_from_csv
+
 
 class TestLoadWSIFilesFromCSV(unittest.TestCase):
     def setUp(self):
         """Set up a temporary CSV file for testing."""
         self.test_csv_path = Path("test.csv")
         self.data = {
-            "Filename": ["file1.svs", "file2.svs", "file3.jpg", "file4.svs", "file5.png"]
+            "Filename": [
+                "file1.svs",
+                "file2.svs",
+                "file3.jpg",
+                "file4.svs",
+                "file5.png",
+            ]
         }
         self.df = pd.DataFrame(self.data)
         self.df.to_csv(self.test_csv_path, index=False)
@@ -34,6 +40,7 @@ class TestLoadWSIFilesFromCSV(unittest.TestCase):
         """Test load_wsi_files_from_csv with a nonexistent CSV file."""
         with self.assertRaises(FileNotFoundError):
             load_wsi_files_from_csv("nonexistent.csv", "svs")
+
 
 if __name__ == "__main__":
     unittest.main()

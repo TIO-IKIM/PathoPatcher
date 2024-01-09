@@ -1,14 +1,12 @@
-from cgi import test
 import json
 import os
 import shutil
-from tkinter import NO
 import unittest
 from pathlib import Path
 
 import numpy as np
 import yaml
-from numpy.testing import assert_almost_equal, assert_array_equal
+from numpy.testing import assert_almost_equal
 from PIL import Image
 
 from pathopatcher.cli import PreProcessingConfig, PreProcessingYamlConfig
@@ -20,12 +18,14 @@ from test_database.download import check_test_database
 
 class TestPreProcessorBaseline(unittest.TestCase):
     """Test the PreProcessor Module with basic (default) parameter setup"""
-    
+
     @classmethod
-    def setUpClass(cls) -> None:    
+    def setUpClass(cls) -> None:
         """Setup configuration"""
         check_test_database()
-        cls.config = "./tests/static_test_files/preprocessing/annotations_filtering/config.yaml"        
+        cls.config = (
+            "./tests/static_test_files/preprocessing/annotations_filtering/config.yaml"
+        )
         with open(cls.config, "r") as config_file:
             yaml_config = yaml.safe_load(config_file)
             yaml_config = PreProcessingYamlConfig(**yaml_config)
@@ -33,13 +33,13 @@ class TestPreProcessorBaseline(unittest.TestCase):
         opt_dict = dict(yaml_config)
         cls.opt_dict = {k: v for k, v in opt_dict.items() if v is not None}
         cls.configuration = PreProcessingConfig(**cls.opt_dict)
-        
+
         cls.gt_folder = Path(
             "./tests/static_test_files/preprocessing/annotations_filtering/results/"
         ).resolve()
         cls.wsi_name1 = "CMU-1"
         cls.wsi_name2 = "JP2K-33003-1"
-        
+
         preprocess_logger = Logger(
             level=cls.configuration.log_level.upper(),
             log_dir=cls.configuration.log_path,
@@ -72,36 +72,45 @@ class TestPreProcessorBaseline(unittest.TestCase):
         for f in clean_files:
             os.remove(f.resolve())
         shutil.rmtree(f.parent.resolve())
-    
+
     def test_init_files(self) -> None:
         """For this case 1 WSI files should have been loaded"""
         self.assertEqual(self.slide_processor.num_files, 3)
-        
+
     def test_init_num_annotations_loaded(self) -> None:
         """For this case 0 annotation files should have been loaded"""
         self.assertEqual(len(self.slide_processor.annotation_files), 2)
-    
+
     def test_no_mask_folder(self) -> None:
         """Test that no mask folder has been created"""
         mask_folder = self.slide_processor.config.output_path / self.wsi_name1 / "masks"
         self.assertFalse(mask_folder.exists())
-        
-    
+
     def test_filterer_annotations(self) -> None:
         """Test if annotations have been filtered correctly and no cyst is inside the masks folder"""
         test_path = (
-            self.slide_processor.config.output_path / self.wsi_name1 / "annotation_masks"
+            self.slide_processor.config.output_path
+            / self.wsi_name1
+            / "annotation_masks"
         )
         test_files = [f for f in test_path.glob("*cyst*")]
         self.assertEqual(len(test_files), 0)
-    
+
     def test_mask_overlaid_image(self) -> None:
         """Test if the mask overlaid image is correct and no cyst is displayed"""
-        gt_path = self.gt_folder / self.wsi_name1 / "annotation_masks" / "all_overlaid_clean.png"
+        gt_path = (
+            self.gt_folder
+            / self.wsi_name1
+            / "annotation_masks"
+            / "all_overlaid_clean.png"
+        )
         gt_image = np.array(Image.open(gt_path.resolve()))
 
         test_path = (
-            self.slide_processor.config.output_path / self.wsi_name1 / "annotation_masks" / "all_overlaid_clean.png"
+            self.slide_processor.config.output_path
+            / self.wsi_name1
+            / "annotation_masks"
+            / "all_overlaid_clean.png"
         )
         test_image = np.array(Image.open(test_path.resolve()))
         assert_almost_equal(test_image, gt_image)
@@ -119,7 +128,7 @@ class TestPreProcessorBaseline(unittest.TestCase):
             test_file = yaml.safe_load(config_file)
 
         self.assertEqual(yaml_config, test_file)
-    
+
     def test_patch_results_wsi(self) -> None:
         """Test if patches are extracted the right way for WSI"""
         gt_path = self.gt_folder / self.wsi_name1 / "patch_metadata.json"

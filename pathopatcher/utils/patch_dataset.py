@@ -1,15 +1,10 @@
-from torch.utils.data import DataLoader, Dataset
-from natsort import natsorted
-from PIL import Image
 from pathlib import Path
-
-
-from torch.utils.data import DataLoader, Dataset
-from natsort import natsorted
-from PIL import Image
-from pathlib import Path
-import torch
 from typing import Callable, Tuple
+
+import torch
+from natsort import natsorted
+from PIL import Image
+from torch.utils.data import DataLoader, Dataset
 
 
 class TissueDetectionDataset(Dataset):

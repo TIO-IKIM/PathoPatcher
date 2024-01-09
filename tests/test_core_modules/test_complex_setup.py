@@ -1,14 +1,12 @@
-from cgi import test
 import json
 import os
 import shutil
-from tkinter import NO
 import unittest
 from pathlib import Path
 
 import numpy as np
 import yaml
-from numpy.testing import assert_almost_equal, assert_array_equal
+from numpy.testing import assert_array_equal
 from PIL import Image
 
 from pathopatcher.cli import PreProcessingConfig, PreProcessingYamlConfig
@@ -20,12 +18,12 @@ from test_database.download import check_test_database
 
 class TestPreProcessorBaseline(unittest.TestCase):
     """Test the PreProcessor Module with basic (default) parameter setup"""
-    
+
     @classmethod
-    def setUpClass(cls) -> None:    
+    def setUpClass(cls) -> None:
         """Setup configuration"""
         check_test_database()
-        cls.config = "./tests/static_test_files/preprocessing/complex_setup/config.yaml"        
+        cls.config = "./tests/static_test_files/preprocessing/complex_setup/config.yaml"
         with open(cls.config, "r") as config_file:
             yaml_config = yaml.safe_load(config_file)
             yaml_config = PreProcessingYamlConfig(**yaml_config)
@@ -33,12 +31,12 @@ class TestPreProcessorBaseline(unittest.TestCase):
         opt_dict = dict(yaml_config)
         cls.opt_dict = {k: v for k, v in opt_dict.items() if v is not None}
         cls.configuration = PreProcessingConfig(**cls.opt_dict)
-        
+
         cls.gt_folder = Path(
             "./tests/static_test_files/preprocessing/complex_setup/results/"
         ).resolve()
         cls.wsi_name = "CMU-1-Small-Region"
-        
+
         preprocess_logger = Logger(
             level=cls.configuration.log_level.upper(),
             log_dir=cls.configuration.log_path,
@@ -71,37 +69,41 @@ class TestPreProcessorBaseline(unittest.TestCase):
         for f in clean_files:
             os.remove(f.resolve())
         shutil.rmtree(f.parent.resolve())
-        
+
     def test_output_wsi_size(self) -> None:
         """Test if patch size for WSI is correct"""
-        patch_path = (
-            self.slide_processor.config.output_path / self.wsi_name / "patches"
-        )
+        patch_path = self.slide_processor.config.output_path / self.wsi_name / "patches"
         patch_path = [f for f in patch_path.iterdir() if f.suffix == ".png"][0]
 
         patch = np.array(Image.open(patch_path.resolve()))
 
         self.assertEqual(patch.shape, (400, 400, 3))
-    
+
     def test_patch_overlap(self) -> None:
-        """Test if patch overlap is correct"""        
+        """Test if patch overlap is correct"""
         patch_folder = (
             self.slide_processor.config.output_path / self.wsi_name / "patches"
         )
-        patch_left_t = np.array(Image.open((patch_folder / f"{self.wsi_name}_0_2.png").resolve()))
-        patch_right_t = np.array(Image.open((patch_folder / f"{self.wsi_name}_0_3.png").resolve()))
-        patch_left_b = np.array(Image.open((patch_folder / f"{self.wsi_name}_1_2.png").resolve()))
-        patch_right_b = np.array(Image.open((patch_folder / f"{self.wsi_name}_1_3.png").resolve()))
+        patch_left_t = np.array(
+            Image.open((patch_folder / f"{self.wsi_name}_0_2.png").resolve())
+        )
+        patch_right_t = np.array(
+            Image.open((patch_folder / f"{self.wsi_name}_0_3.png").resolve())
+        )
+        patch_left_b = np.array(
+            Image.open((patch_folder / f"{self.wsi_name}_1_2.png").resolve())
+        )
+        patch_right_b = np.array(
+            Image.open((patch_folder / f"{self.wsi_name}_1_3.png").resolve())
+        )
         print(patch_left_t.shape)
-        assert_array_equal(patch_left_t[:,300:,:], patch_right_t[:,:100,:])
-        assert_array_equal(patch_left_b[:,300:,:], patch_right_b[:,:100,:])
-        assert_array_equal(patch_left_t[300:,:,:], patch_left_b[:100,:,:])
-        assert_array_equal(patch_right_t[300:,:,:], patch_right_b[:100,:,:])
+        assert_array_equal(patch_left_t[:, 300:, :], patch_right_t[:, :100, :])
+        assert_array_equal(patch_left_b[:, 300:, :], patch_right_b[:, :100, :])
+        assert_array_equal(patch_left_t[300:, :, :], patch_left_b[:100, :, :])
+        assert_array_equal(patch_right_t[300:, :, :], patch_right_b[:100, :, :])
 
-    
     def test_metadata_wsi(self) -> None:
-        """Test if metadata is extracted the right way for WSI
-        """
+        """Test if metadata is extracted the right way for WSI"""
         gt_path = self.gt_folder / self.wsi_name / "metadata.yaml"
         with open(gt_path, "r") as config_file:
             yaml_config = yaml.safe_load(config_file)
@@ -113,7 +115,7 @@ class TestPreProcessorBaseline(unittest.TestCase):
             test_file = yaml.safe_load(config_file)
 
         self.assertEqual(yaml_config, test_file)
-    
+
     def test_patch_results_wsi(self) -> None:
         """Test if patches are extracted the right way for WSI"""
         gt_path = self.gt_folder / self.wsi_name / "patch_metadata.json"

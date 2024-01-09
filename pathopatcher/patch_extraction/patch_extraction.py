@@ -24,7 +24,6 @@ matplotlib.use("Agg")  # Agg is a non-interactive backend
 import warnings
 
 import numpy as np
-import torch
 from natsort import natsorted
 from openslide import OpenSlide
 from PIL import Image
@@ -816,7 +815,7 @@ class PreProcessor(object):
         self._check_wsi_resolution(slide.properties)
 
         resulting_mpp = None
-        
+
         # target mpp has highest precedence
         if self.config.target_mpp is not None:
             self.config.downsample, self.rescaling_factor = target_mpp_to_downsample(
@@ -824,7 +823,12 @@ class PreProcessor(object):
                 self.config.target_mpp,
             )
             if self.rescaling_factor != 1.0:
-                resulting_mpp = slide_properties["mpp"] * self.rescaling_factor/2 * self.config.downsample
+                resulting_mpp = (
+                    slide_properties["mpp"]
+                    * self.rescaling_factor
+                    / 2
+                    * self.config.downsample
+                )
             else:
                 resulting_mpp = slide_properties["mpp"] * self.config.downsample
         # target mag has precedence before downsample!
@@ -867,7 +871,7 @@ class PreProcessor(object):
             self.config.downsample = 2 ** (tiles.level_count - level - 1)
             if resulting_mpp is None:
                 resulting_mpp = slide_properties["mpp"] * self.config.downsample
-                
+
         if level >= tiles.level_count:
             raise WrongParameterException(
                 "Requested level does not exist. Number of slide levels:",
@@ -875,7 +879,7 @@ class PreProcessor(object):
             )
 
         # calculate resulting mpp
-        
+
         # store level!
         self.curr_wsi_level = level
 

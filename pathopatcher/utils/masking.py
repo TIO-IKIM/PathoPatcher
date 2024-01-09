@@ -16,8 +16,7 @@ import rasterio
 import skimage.color as sk_color
 import skimage.filters as sk_filters
 import skimage.morphology as sk_morphology
-from histolab.filters.image_filters import (BluePenFilter, GreenPenFilter,
-                                            RedPenFilter)
+from histolab.filters.image_filters import BluePenFilter, GreenPenFilter, RedPenFilter
 from PIL import Image
 from rasterio.mask import mask as rasterio_mask
 from shapely.affinity import scale

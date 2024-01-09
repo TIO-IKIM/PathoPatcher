@@ -99,5 +99,6 @@ class TestMacenkoSaving(unittest.TestCase):
         )
         assert_allclose(correc_values["max_sat"], calculated_values["max_sat"])
 
+
 if __name__ == "__main__":
     unittest.main()

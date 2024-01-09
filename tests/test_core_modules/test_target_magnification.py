@@ -1,15 +1,9 @@
-from cgi import test
-import json
 import os
 import shutil
-from tkinter import NO
+
 import unittest
 from pathlib import Path
-
-import numpy as np
 import yaml
-from numpy.testing import assert_almost_equal, assert_array_equal
-from PIL import Image
 
 from pathopatcher.cli import PreProcessingConfig, PreProcessingYamlConfig
 from pathopatcher.patch_extraction.patch_extraction import PreProcessor
@@ -20,12 +14,14 @@ from test_database.download import check_test_database
 
 class TestPreProcessorDownsample(unittest.TestCase):
     """Test the PreProcessor Module with downsample (default) parameter setup"""
-    
+
     @classmethod
-    def setUpClass(cls) -> None:    
+    def setUpClass(cls) -> None:
         """Setup configuration"""
         check_test_database()
-        cls.config = "./tests/static_test_files/preprocessing/target_magnification/config.yaml"        
+        cls.config = (
+            "./tests/static_test_files/preprocessing/target_magnification/config.yaml"
+        )
         with open(cls.config, "r") as config_file:
             yaml_config = yaml.safe_load(config_file)
             yaml_config = PreProcessingYamlConfig(**yaml_config)
@@ -33,12 +29,12 @@ class TestPreProcessorDownsample(unittest.TestCase):
         opt_dict = dict(yaml_config)
         cls.opt_dict = {k: v for k, v in opt_dict.items() if v is not None}
         cls.configuration = PreProcessingConfig(**cls.opt_dict)
-        
+
         cls.gt_folder = Path(
             "./tests/static_test_files/preprocessing/target_magnification/results/"
         ).resolve()
         cls.wsi_name = "CMU-1-Small-Region"
-        
+
         preprocess_logger = Logger(
             level=cls.configuration.log_level.upper(),
             log_dir=cls.configuration.log_path,

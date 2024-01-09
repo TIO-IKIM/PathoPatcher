@@ -79,5 +79,6 @@ class TestPreProcessConfig(unittest.TestCase):
         with self.assertRaises(ValueError):
             PreProcessingConfig(**test_opt_dict)
 
+
 if __name__ == "__main__":
     unittest.main()

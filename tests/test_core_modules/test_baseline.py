@@ -1,14 +1,12 @@
-from cgi import test
 import json
 import os
 import shutil
-from tkinter import NO
 import unittest
 from pathlib import Path
 
 import numpy as np
 import yaml
-from numpy.testing import assert_almost_equal, assert_array_equal
+from numpy.testing import assert_almost_equal
 from PIL import Image
 
 from pathopatcher.cli import PreProcessingConfig, PreProcessingYamlConfig
@@ -20,12 +18,12 @@ from test_database.download import check_test_database
 
 class TestPreProcessorBaseline(unittest.TestCase):
     """Test the PreProcessor Module with basic (default) parameter setup"""
-    
+
     @classmethod
-    def setUpClass(cls) -> None:    
+    def setUpClass(cls) -> None:
         """Setup configuration"""
         check_test_database()
-        cls.config = "./tests/static_test_files/preprocessing/baseline/config.yaml"        
+        cls.config = "./tests/static_test_files/preprocessing/baseline/config.yaml"
         with open(cls.config, "r") as config_file:
             yaml_config = yaml.safe_load(config_file)
             yaml_config = PreProcessingYamlConfig(**yaml_config)
@@ -33,12 +31,12 @@ class TestPreProcessorBaseline(unittest.TestCase):
         opt_dict = dict(yaml_config)
         cls.opt_dict = {k: v for k, v in opt_dict.items() if v is not None}
         cls.configuration = PreProcessingConfig(**cls.opt_dict)
-        
+
         cls.gt_folder = Path(
             "./tests/static_test_files/preprocessing/baseline/results/"
         ).resolve()
         cls.wsi_name = "CMU-1-Small-Region"
-        
+
         preprocess_logger = Logger(
             level=cls.configuration.log_level.upper(),
             log_dir=cls.configuration.log_path,
@@ -71,27 +69,24 @@ class TestPreProcessorBaseline(unittest.TestCase):
         for f in clean_files:
             os.remove(f.resolve())
         shutil.rmtree(f.parent.resolve())
-    
+
     def test_init_files(self) -> None:
         """For this case 1 WSI files should have been loaded"""
         self.assertEqual(self.slide_processor.num_files, 1)
-        
+
     def test_init_num_annotations_loaded(self) -> None:
         """For this case 0 annotation files should have been loaded"""
         self.assertEqual(len(self.slide_processor.annotation_files), 0)
-        
+
     def test_output_wsi_size(self) -> None:
         """Test if patch size for WSI is correct"""
-        patch_path = (
-            self.slide_processor.config.output_path / self.wsi_name / "patches"
-        )
+        patch_path = self.slide_processor.config.output_path / self.wsi_name / "patches"
         patch_path = [f for f in patch_path.iterdir() if f.suffix == ".png"][0]
 
         patch = np.array(Image.open(patch_path.resolve()))
 
         self.assertEqual(patch.shape, (256, 256, 3))
 
-    
     def test_thumbnail_image(self) -> None:
         gt_path = self.gt_folder / self.wsi_name / "thumbnail.png"
         gt_image = np.array(Image.open(gt_path.resolve()))
@@ -102,7 +97,6 @@ class TestPreProcessorBaseline(unittest.TestCase):
         test_image = np.array(Image.open(test_path.resolve()))
         assert_almost_equal(test_image, gt_image)
 
-        
     def test_metadata_wsi(self) -> None:
         gt_path = self.gt_folder / self.wsi_name / "metadata.yaml"
         with open(gt_path, "r") as config_file:
@@ -115,33 +109,36 @@ class TestPreProcessorBaseline(unittest.TestCase):
             test_file = yaml.safe_load(config_file)
 
         self.assertEqual(yaml_config, test_file)
-        
+
     def test_patch_metadata(self) -> None:
-        """Test if patch metadata is correct for one example patch
-        """
-        gt_path = self.gt_folder / self.wsi_name / "metadata" / "CMU-1-Small-Region_8_7.yaml"
+        """Test if patch metadata is correct for one example patch"""
+        gt_path = (
+            self.gt_folder / self.wsi_name / "metadata" / "CMU-1-Small-Region_8_7.yaml"
+        )
         with open(gt_path, "r") as f:
             gt_patch_config = yaml.safe_load(f)
-        
-        test_path = self.slide_processor.config.output_path / self.wsi_name / "metadata" / "CMU-1-Small-Region_8_7.yaml"
+
+        test_path = (
+            self.slide_processor.config.output_path
+            / self.wsi_name
+            / "metadata"
+            / "CMU-1-Small-Region_8_7.yaml"
+        )
         with open(test_path, "r") as f:
             test_patch_config = yaml.safe_load(f)
-        
+
         self.assertDictEqual(gt_patch_config, test_patch_config)
-    
+
     def test_count_patches(self) -> None:
-        """Test if the number of patches is correct
-        """
+        """Test if the number of patches is correct"""
         gt_path = self.gt_folder / self.wsi_name / "metadata"
         gt_patches_count = len([f for f in gt_path.glob("*.yaml")])
-        
-        test_path = (
-            self.slide_processor.config.output_path / self.wsi_name / "metadata"
-        )
+
+        test_path = self.slide_processor.config.output_path / self.wsi_name / "metadata"
         test_patches_count = len([f for f in test_path.glob("*.yaml")])
-        
+
         self.assertEqual(gt_patches_count, test_patches_count)
-    
+
     def test_patch_results_wsi(self) -> None:
         """Test if patches are extracted the right way for WSI"""
         gt_path = self.gt_folder / self.wsi_name / "patch_metadata.json"
