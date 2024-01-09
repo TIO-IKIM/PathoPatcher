@@ -1,0 +1,182 @@
+[
+  {
+    "CMU-1-Small-Region_0_1.png": {
+      "row": 0,
+      "col": 1,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_0_1.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_0_2.png": {
+      "row": 0,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_0_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_1_1.png": {
+      "row": 1,
+      "col": 1,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_1_1.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_1_2.png": {
+      "row": 1,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_1_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_1_3.png": {
+      "row": 1,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_1_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_2_0.png": {
+      "row": 2,
+      "col": 0,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_2_0.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_2_1.png": {
+      "row": 2,
+      "col": 1,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_2_1.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_2_2.png": {
+      "row": 2,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_2_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_2_3.png": {
+      "row": 2,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_2_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_3_1.png": {
+      "row": 3,
+      "col": 1,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_3_1.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_3_2.png": {
+      "row": 3,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_3_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_3_3.png": {
+      "row": 3,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_3_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_4_1.png": {
+      "row": 4,
+      "col": 1,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_4_1.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_4_2.png": {
+      "row": 4,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_4_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_4_3.png": {
+      "row": 4,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_4_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_5_1.png": {
+      "row": 5,
+      "col": 1,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_5_1.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_5_2.png": {
+      "row": 5,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_5_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_5_3.png": {
+      "row": 5,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_5_3.yaml"
+    }
+  }
+]

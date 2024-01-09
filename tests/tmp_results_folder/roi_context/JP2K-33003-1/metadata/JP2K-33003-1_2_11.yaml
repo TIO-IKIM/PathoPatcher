@@ -1,0 +1,9 @@
+row: 2
+col: 11
+background_ratio: 0.0
+intersected_labels:
+- 6
+label_ratio:
+  6: 1.0
+mask: ./masks/JP2K-33003-1_2_11_mask.npy
+metadata_path: ./metadata/JP2K-33003-1_2_11.yaml

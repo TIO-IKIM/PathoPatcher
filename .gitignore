@@ -18,3 +18,5 @@ tests/static_test_files/preprocessing/basic
 tests/static_test_files/preprocessing/complex_annotation
 tests/static_test_files/preprocessing/custom
 tests/static_test_files/preprocessing/overlap
+
+output

@@ -1,0 +1,26 @@
+[37m2024-01-08 15:14:19,322 [INFO] - Using OpenSlide
+[37m2024-01-08 15:14:19,322 [INFO] - Data store directory: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/tests/tmp_results_folder/baseline
+[37m2024-01-08 15:14:19,322 [INFO] - Images found: 1
+[37m2024-01-08 15:14:19,322 [INFO] - Annotations found: 0
+[37m2024-01-08 15:14:19,322 [INFO] - Sucessfully started the setup - Now we calculate the base dataset. May take up to 10 Minutes!
+[37m2024-01-08 15:14:19,322 [INFO] - Removing complete dataset! This may take a while.
+[37m2024-01-08 15:14:19,322 [INFO] - *************************************************************************************************************************************************************
+[37m2024-01-08 15:14:19,323 [INFO] - 1/1: CMU-1-Small-Region.svs
+[37m2024-01-08 15:14:19,323 [INFO] - Computing patches for CMU-1-Small-Region.svs
+[37m2024-01-08 15:14:19,348 [INFO] - Generate thumbnails
+[94m2024-01-08 15:14:19,348 [DEBUG] - Save thumbnails of image at different scales: [32, 64, 128]
+[37m2024-01-08 15:14:25,824 [INFO] - CMU-1-Small-Region.svs: Processing 62 patches.
+[37m2024-01-08 15:14:28,090 [INFO] - Start extracting patches...
+[94m2024-01-08 15:14:28,090 [DEBUG] - Started process MainProcess
+[94m2024-01-08 15:14:28,471 [DEBUG] - Padding Tile
+[94m2024-01-08 15:14:29,186 [DEBUG] - Padding Tile
+[94m2024-01-08 15:14:29,193 [DEBUG] - Padding Tile
+[94m2024-01-08 15:14:29,199 [DEBUG] - Padding Tile
+[94m2024-01-08 15:14:29,226 [DEBUG] - Padding Tile
+[94m2024-01-08 15:14:29,266 [DEBUG] - Padding Tile
+[37m2024-01-08 15:14:45,061 [INFO] - Finished Processing and Storing. Took:
+[37m2024-01-08 15:14:45,062 [INFO] - Time usage: 0:00:16.784011
+[37m2024-01-08 15:14:45,068 [INFO] - Total patches sampled: 62
+[37m2024-01-08 15:14:45,071 [INFO] - Patches saved to: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/tests/tmp_results_folder/baseline
+[37m2024-01-08 15:14:45,071 [INFO] - Total patches sampled for all WSI: 62
+[37m2024-01-08 15:14:45,071 [INFO] - Time usage: 0:00:25.748811

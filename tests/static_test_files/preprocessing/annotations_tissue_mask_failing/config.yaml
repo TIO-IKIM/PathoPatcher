@@ -1,0 +1,29 @@
+# dataset paths
+wsi_paths: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/test_database/input/WSI
+output_path: ./tests/tmp_results_folder/annotations_tissue_mask_failing
+wsi_extensions: svs
+
+# annotations
+annotation_paths: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/test_database/input/Annotations
+annotation_extension: json
+incomplete_annotations: True
+label_map_file: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/test_database/input/label_map.json
+save_only_annotated_patches: True
+save_context_without_mask: False 
+exclude_classes: []
+store_masks: False
+
+# basic setups
+target_mag: 1.25 
+patch_size: 1024
+patch_overlap: 0
+normalize_stains: False
+min_intersection_ratio: 0.25
+tissue_annotation: Tissue
+
+processes: 8
+overwrite: True
+hardware_selection: openslide
+
+# other
+log_level: debug

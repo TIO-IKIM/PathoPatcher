@@ -1,0 +1,29 @@
+# dataset paths
+wsi_paths: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/test_database/input/WSI/CMU-1.svs
+output_path: ./tests/tmp_results_folder/annotations_simple
+wsi_extensions: svs
+
+# annotations
+annotation_paths: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/test_database/input/Annotations
+annotation_extension: json
+incomplete_annotations: True
+label_map_file: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/test_database/input/label_map.json
+save_only_annotated_patches: False
+save_context_without_mask: False 
+exclude_classes: []
+store_masks: False
+
+# basic setups
+target_mpp: 0.499
+patch_size: 512
+patch_overlap: 0
+normalize_stains: False
+filter_patches: True 
+apply_prefilter: True
+
+processes: 8
+overwrite: True
+hardware_selection: openslide
+
+# other
+log_level: debug

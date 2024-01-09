@@ -459,7 +459,7 @@ class PreProcessor(object):
         model = mobilenet_v3_small().to(device=self.detector_device)
         model.classifier[-1] = nn.Linear(1024, 4)
         checkpoint = torch.load(
-            "./preprocessing/patch_extraction/src/data/tissue_detector.pt",
+            "./pathopatcher/data/tissue_detector.pt",
             map_location=self.detector_device,
         )
         model.load_state_dict(checkpoint["model_state_dict"])
@@ -815,18 +815,25 @@ class PreProcessor(object):
         # Check whether the resolution of the current image is the same as the given one
         self._check_wsi_resolution(slide.properties)
 
+        resulting_mpp = None
+        
         # target mpp has highest precedence
         if self.config.target_mpp is not None:
             self.config.downsample, self.rescaling_factor = target_mpp_to_downsample(
                 slide_properties["mpp"],
                 self.config.target_mpp,
             )
+            if self.rescaling_factor != 1.0:
+                resulting_mpp = slide_properties["mpp"] * self.rescaling_factor/2 * self.config.downsample
+            else:
+                resulting_mpp = slide_properties["mpp"] * self.config.downsample
         # target mag has precedence before downsample!
         elif self.config.target_mag is not None:
             self.config.downsample = target_mag_to_downsample(
                 slide_properties["magnification"],
                 self.config.target_mag,
             )
+            resulting_mpp = slide_properties["mpp"] * self.config.downsample
 
         # Zoom Recap:
         # - Row and column of the tile within the Deep Zoom level (t_)
@@ -854,14 +861,21 @@ class PreProcessor(object):
             # we always need to remove 1 level more than necessary, so 4
             # so we can just use the bit length of the numbers, since 8 = 1000 and len(1000) = 4
             level = tiles.level_count - self.config.downsample.bit_length()
+            if resulting_mpp is None:
+                resulting_mpp = slide_properties["mpp"] * self.config.downsample
         else:
             self.config.downsample = 2 ** (tiles.level_count - level - 1)
+            if resulting_mpp is None:
+                resulting_mpp = slide_properties["mpp"] * self.config.downsample
+                
         if level >= tiles.level_count:
             raise WrongParameterException(
                 "Requested level does not exist. Number of slide levels:",
                 tiles.level_count,
             )
 
+        # calculate resulting mpp
+        
         # store level!
         self.curr_wsi_level = level
 
@@ -925,7 +939,7 @@ class PreProcessor(object):
             "patch_overlap": self.config.patch_overlap * 2,
             "patch_size": self.config.patch_size,
             "base_mpp": slide_mpp,
-            "target_patch_mpp": slide_mpp * self.rescaling_factor,
+            "target_patch_mpp": resulting_mpp,
             "stain_normalization": self.config.normalize_stains,
             "magnification": slide_mag
             / (self.config.downsample * self.rescaling_factor),

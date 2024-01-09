@@ -1,0 +1,532 @@
+[
+  {
+    "CMU-1-Small-Region_0_0.png": {
+      "row": 0,
+      "col": 0,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_0_0.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_0_2.png": {
+      "row": 0,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_0_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_0_3.png": {
+      "row": 0,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_0_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_0_4.png": {
+      "row": 0,
+      "col": 4,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_0_4.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_1_2.png": {
+      "row": 1,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_1_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_1_3.png": {
+      "row": 1,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_1_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_1_4.png": {
+      "row": 1,
+      "col": 4,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_1_4.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_1_5.png": {
+      "row": 1,
+      "col": 5,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_1_5.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_1_6.png": {
+      "row": 1,
+      "col": 6,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_1_6.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_1_7.png": {
+      "row": 1,
+      "col": 7,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_1_7.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_2_2.png": {
+      "row": 2,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_2_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_2_3.png": {
+      "row": 2,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_2_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_2_4.png": {
+      "row": 2,
+      "col": 4,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_2_4.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_2_5.png": {
+      "row": 2,
+      "col": 5,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_2_5.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_2_6.png": {
+      "row": 2,
+      "col": 6,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_2_6.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_2_7.png": {
+      "row": 2,
+      "col": 7,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_2_7.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_3_0.png": {
+      "row": 3,
+      "col": 0,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_3_0.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_3_1.png": {
+      "row": 3,
+      "col": 1,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_3_1.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_3_2.png": {
+      "row": 3,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_3_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_3_3.png": {
+      "row": 3,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_3_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_3_4.png": {
+      "row": 3,
+      "col": 4,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_3_4.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_3_5.png": {
+      "row": 3,
+      "col": 5,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_3_5.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_3_6.png": {
+      "row": 3,
+      "col": 6,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_3_6.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_4_2.png": {
+      "row": 4,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_4_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_4_3.png": {
+      "row": 4,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_4_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_4_4.png": {
+      "row": 4,
+      "col": 4,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_4_4.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_4_5.png": {
+      "row": 4,
+      "col": 5,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_4_5.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_4_6.png": {
+      "row": 4,
+      "col": 6,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_4_6.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_5_2.png": {
+      "row": 5,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_5_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_5_3.png": {
+      "row": 5,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_5_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_5_4.png": {
+      "row": 5,
+      "col": 4,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_5_4.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_5_5.png": {
+      "row": 5,
+      "col": 5,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_5_5.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_6_2.png": {
+      "row": 6,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_6_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_6_3.png": {
+      "row": 6,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_6_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_6_4.png": {
+      "row": 6,
+      "col": 4,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_6_4.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_6_5.png": {
+      "row": 6,
+      "col": 5,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_6_5.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_6_6.png": {
+      "row": 6,
+      "col": 6,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_6_6.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_7_2.png": {
+      "row": 7,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_7_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_7_3.png": {
+      "row": 7,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_7_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_7_4.png": {
+      "row": 7,
+      "col": 4,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_7_4.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_7_5.png": {
+      "row": 7,
+      "col": 5,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_7_5.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_7_6.png": {
+      "row": 7,
+      "col": 6,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_7_6.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_8_1.png": {
+      "row": 8,
+      "col": 1,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_8_1.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_8_2.png": {
+      "row": 8,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_8_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_8_3.png": {
+      "row": 8,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_8_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_8_4.png": {
+      "row": 8,
+      "col": 4,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_8_4.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_8_5.png": {
+      "row": 8,
+      "col": 5,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_8_5.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_8_6.png": {
+      "row": 8,
+      "col": 6,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_8_6.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_9_1.png": {
+      "row": 9,
+      "col": 1,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_9_1.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_9_2.png": {
+      "row": 9,
+      "col": 2,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_9_2.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_9_3.png": {
+      "row": 9,
+      "col": 3,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_9_3.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_9_4.png": {
+      "row": 9,
+      "col": 4,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_9_4.yaml"
+    }
+  },
+  {
+    "CMU-1-Small-Region_9_5.png": {
+      "row": 9,
+      "col": 5,
+      "background_ratio": 1.0,
+      "intersected_labels": [],
+      "label_ratio": {},
+      "metadata_path": "./metadata/CMU-1-Small-Region_9_5.yaml"
+    }
+  }
+]

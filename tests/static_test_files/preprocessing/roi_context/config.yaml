@@ -1,0 +1,32 @@
+# dataset paths
+wsi_paths: ./test_database/input/WSI/JP2K-33003-1.svs
+output_path: ./tests/tmp_results_folder/roi_context
+wsi_extensions: svs
+
+# annotations
+annotation_paths: ./test_database/input/Annotations
+annotation_extension: json
+incomplete_annotations: True
+label_map_file: ./test_database/input/label_map.json
+save_only_annotated_patches: False
+save_context_without_mask: True 
+exclude_classes: []
+store_masks: True
+
+# basic setups
+target_mpp: 1
+patch_size: 256
+patch_overlap: 0
+normalize_stains: False
+min_intersection_ratio: 0.05
+tissue_annotation: ROI
+tissue_annotation_intersection_ratio: 1.0
+filter_patches: True 
+apply_prefilter: True
+
+processes: 8
+overwrite: True
+hardware_selection: openslide
+
+# other
+log_level: debug

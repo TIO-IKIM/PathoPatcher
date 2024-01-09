@@ -1,7 +1,7 @@
 # dataset paths
 wsi_path: ./test_database/input/WSI/CMU-1-Small-Region.svs
 wsi_extensions: svs
-save_json_path: ./tests/output/macenko/test_macenko.json
+save_json_path: ./tests/tmp_results_folder/macenko/test_macenko.json
 
 # basic setups
 downsample: 1

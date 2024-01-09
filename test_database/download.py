@@ -70,7 +70,7 @@ def check_and_download(
 def check_test_database() -> None:
     """Check if the test database exists, and download it if it does not exist."""
     print("Checking Test Database")
-    base_path = Path(__file__).parent / "input/WSI/wsss"
+    base_path = Path(__file__).parent / "input/WSI/"
     check_and_download(
         base_path,
         "CMU-1.svs",
