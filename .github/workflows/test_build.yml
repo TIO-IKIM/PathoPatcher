@@ -33,10 +33,10 @@ jobs:
         auto-update-conda: true
         auto-activate-base: false
     - name : Run CLI Tests
-      run: python -m pytest ./tests/test_cli
+      run: python -m pytest -vv -s ./tests/test_cli
     - name : Run Util Tests
-      run: python -m pytest ./tests/test_utils
+      run: python -m pytest -vv -s ./tests/test_utils
     - name : Run Macenko Tests
-      run: python -m pytest ./tests/test_macenko_module
+      run: python -m pytest -vv -s ./tests/test_macenko_module
     - name : Run Core Tests
-      run: python -m pytest ./tests/test_core_modules
+      run: python -m pytest -vv -s ./tests/test_core_modules
