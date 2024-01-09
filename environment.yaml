@@ -1,4 +1,4 @@
-name: pathopatch_env_fork
+name: pathopatch_env
 channels:
   - conda-forge
   - defaults

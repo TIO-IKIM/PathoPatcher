@@ -28,16 +28,15 @@ jobs:
         channels: conda-forge, defaults
         python-version: 3.10.12
         environment-file: environment.yaml
-        activate-environment: pathopatch_env_fork
+        activate-environment: pathopatch_env
         use-only-tar-bz2: true  # IMPORTANT: This needs to be set for caching to work properly!
         auto-update-conda: true
         auto-activate-base: false
     - name : Run CLI Tests
       run: python -m pytest ./tests/test_cli
-    - name : Run Core Tests
-      run: python -m pytest ./tests/test_core_modules
     - name : Run Util Tests
       run: python -m pytest ./tests/test_utils
     - name : Run Macenko Tests
       run: python -m pytest ./tests/test_macenko_module
-        
+    - name : Run Core Tests
+      run: python -m pytest ./tests/test_core_modules
