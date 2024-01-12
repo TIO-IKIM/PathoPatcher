@@ -14,7 +14,7 @@ import os
 import sys
 
 from colorama import init
-from pathopatcher.config.config import COLOR_CODES_LOGGING
+from pathopatch.config.config import COLOR_CODES_LOGGING
 
 init(autoreset=True)
 

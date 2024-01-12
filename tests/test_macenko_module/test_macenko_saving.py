@@ -9,8 +9,8 @@ import numpy as np
 import yaml
 from numpy.testing import assert_allclose
 
-from pathopatcher.cli import MacenkoConfig, MacenkoParser, MacenkoYamlConfig
-from pathopatcher.patch_extraction.patch_extraction import PreProcessor
+from pathopatch.cli import MacenkoConfig, MacenkoParser, MacenkoYamlConfig
+from pathopatch.patch_extraction.patch_extraction import PreProcessor
 from test_database.download import check_test_database
 
 

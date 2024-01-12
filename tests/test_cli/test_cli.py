@@ -11,7 +11,7 @@ sys.path.insert(0, parentdir)
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
-from pathopatcher.cli import (
+from pathopatch.cli import (
     PreProcessingConfig,
     PreProcessingYamlConfig,
 )

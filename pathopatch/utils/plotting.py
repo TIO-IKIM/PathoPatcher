@@ -16,8 +16,8 @@ from PIL import Image, ImageDraw
 from rasterio.mask import mask as rasterio_mask
 from shapely.geometry import Polygon
 
-from pathopatcher.config.config import COLOR_DEFINITIONS
-from pathopatcher.utils.masking import get_filtered_polygons
+from pathopatch.config.config import COLOR_DEFINITIONS
+from pathopatch.utils.masking import get_filtered_polygons
 
 
 def generate_polygon_overview(

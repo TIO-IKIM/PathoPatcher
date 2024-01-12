@@ -16,9 +16,9 @@ from typing import Any, List, Optional, Tuple
 import yaml
 from pydantic import BaseModel, validator
 
-from pathopatcher.base_ml.base_cli import ABCParser
-from pathopatcher.config.config import ANNOTATION_EXT, LOGGING_EXT, WSI_EXT
-from pathopatcher.utils.logger import Logger
+from pathopatch.base_ml.base_cli import ABCParser
+from pathopatch.config.config import ANNOTATION_EXT, LOGGING_EXT, WSI_EXT
+from pathopatch.utils.logger import Logger
 
 
 class PreProcessingYamlConfig(BaseModel):
