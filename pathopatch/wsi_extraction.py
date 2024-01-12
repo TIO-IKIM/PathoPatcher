@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+#!/usr/bin/env python
 
 # -*- coding: utf-8 -*-
 # Main entry point for patch-preprocessing
@@ -24,7 +24,8 @@ from pathopatch.cli import PreProcessingParser
 from pathopatch.patch_extraction.patch_extraction import PreProcessor
 from pathopatch.utils.tools import close_logger
 
-if __name__ == "__main__":
+
+def main():
     configuration_parser = PreProcessingParser()
     configuration, logger = configuration_parser.get_config()
     configuration_parser.store_config()
@@ -34,3 +35,7 @@ if __name__ == "__main__":
 
     logger.info("Finished Preprocessing.")
     close_logger(logger)
+
+
+if __name__ == "__main__":
+    main()
