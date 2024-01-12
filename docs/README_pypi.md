@@ -7,27 +7,10 @@ ___
 
 # PathoPatch:
 ## Accelerating Artificial Intelligence Based Whole Slide Image Analysis with an Optimized Preprocessing Pipeline
-
-<div align="center">
-
-[Installation](#installation) • [Usage](#usage) • [Examples](#examples) • [Roadmap](#Roadmap) • [Citation](#Citation)
-
-</div>
-
----
-<p align="center">
-  <img src="./docs/preprocessing_pipeline.png"/>
-</p>
-
 ---
 
 ## Installation
 
-### PIP-Package
-The package can be found here: https://pypi.org/project/pathopatch/
-Installation: `pip install pathopatch`
-
-### Developmemnt/from source
 1. Clone the repository:
 2. Create a conda environment with Python 3.10.12 version and install conda requirements: `conda env create -f environment.yaml -vv`. You can change the environment name by editing the `name` tag in the environment.yaml file.
 This step is necessary, as we need to install `Openslide` with binary files. This is easier with conda. Otherwise, installation from [source](https://openslide.org/api/python/) needs to be performed and packages installed with pi
@@ -35,7 +18,7 @@ This step is necessary, as we need to install `Openslide` with binary files. Thi
 4. **Optional: cuCIM**
 Run `conda install -c rapidsai cucim` inside your conda environment. This process is time consuming, so you should be patient. Also follow their [official guideline](https://github.com/rapidsai/cucim) if any problems occur.
 
-### Commiting
+### Development
 1. Install pre-commit with `pre-commit install`
 
 
@@ -271,15 +254,6 @@ WSI_Name
 ├── patch_metadata.json   # Patch metadata of WSI merged in one file
 └── thumbnail.png         # WSI thumbnail
 ```
-
-## Examples
-
-
-## Roadmap
-TBD
-
-## Citation
-TBD
 
 ## License
 <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/TIO-IKIM/PathoPatcher">PathoPatcher</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/FabianHoerst">Fabian Hörst, University Hospital Essen,</a> is licensed under <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1"></a></p>
