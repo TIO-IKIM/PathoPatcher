@@ -31,15 +31,15 @@ from shapely.affinity import scale
 from shapely.geometry import Polygon
 from tqdm import tqdm
 
-from pathopatcher import logger
-from pathopatcher.cli import PreProcessingConfig
-from pathopatcher.patch_extraction.storage import Storage
-from pathopatcher.utils.exceptions import (
+from pathopatch import logger
+from pathopatch.cli import PreProcessingConfig
+from pathopatch.patch_extraction.storage import Storage
+from pathopatch.utils.exceptions import (
     UnalignedDataException,
     WrongParameterException,
 )
-from pathopatcher.utils.patch_dataset import load_tissue_detection_dl
-from pathopatcher.utils.patch_util import (
+from pathopatch.utils.patch_dataset import load_tissue_detection_dl
+from pathopatch.utils.patch_util import (
     DeepZoomGeneratorOS,
     calculate_background_ratio,
     compute_interesting_patches,
@@ -55,7 +55,7 @@ from pathopatcher.utils.patch_util import (
     target_mag_to_downsample,
     target_mpp_to_downsample,
 )
-from pathopatcher.utils.tools import end_timer, module_exists, start_timer
+from pathopatch.utils.tools import end_timer, module_exists, start_timer
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -414,7 +414,7 @@ class PreProcessor(object):
             logger.info("Using CuCIM")
             from cucim import CuImage
 
-            from pathopatcher.patch_extraction.cucim_deepzoom import (
+            from pathopatch.patch_extraction.cucim_deepzoom import (
                 DeepZoomGeneratorCucim,
             )
 
@@ -458,7 +458,7 @@ class PreProcessor(object):
         model = mobilenet_v3_small().to(device=self.detector_device)
         model.classifier[-1] = nn.Linear(1024, 4)
         checkpoint = torch.load(
-            "./pathopatcher/data/tissue_detector.pt",
+            "./pathopatch/data/tissue_detector.pt", # this causes errors
             map_location=self.detector_device,
         )
         model.load_state_dict(checkpoint["model_state_dict"])

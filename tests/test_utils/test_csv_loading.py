@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 from pathlib import Path
-from pathopatcher.utils.file_handling import load_wsi_files_from_csv
+from pathopatch.utils.file_handling import load_wsi_files_from_csv
 
 
 class TestLoadWSIFilesFromCSV(unittest.TestCase):

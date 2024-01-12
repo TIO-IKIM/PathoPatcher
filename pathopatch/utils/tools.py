@@ -13,7 +13,7 @@ from datetime import timedelta
 from timeit import default_timer as timer
 from typing import Dict, List, Optional, Tuple, Union
 
-from pathopatcher import logger
+from pathopatch import logger
 
 
 # Helper timing functions

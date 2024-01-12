@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from pathopatcher.utils.masking import mask_rgb
+from pathopatch.utils.masking import mask_rgb
 
 
 class TestMaskRGB(unittest.TestCase):

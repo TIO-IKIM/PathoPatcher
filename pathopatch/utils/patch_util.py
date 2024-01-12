@@ -24,13 +24,13 @@ from shapely.affinity import translate
 from shapely.geometry import Polygon, shape
 from shapely.validation import make_valid
 
-from pathopatcher import logger
-from pathopatcher.utils.exceptions import WrongParameterException
-from pathopatcher.utils.masking import (
+from pathopatch import logger
+from pathopatch.utils.exceptions import WrongParameterException
+from pathopatch.utils.masking import (
     convert_polygons_to_mask,
     generate_tissue_mask,
 )
-from pathopatcher.utils.plotting import generate_polygon_overview
+from pathopatch.utils.plotting import generate_polygon_overview
 
 
 def get_files_from_dir(

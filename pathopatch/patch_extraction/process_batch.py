@@ -15,7 +15,7 @@ from openslide import OpenSlide
 from PIL import Image
 from shapely.geometry import Polygon
 
-from pathopatcher.utils.patch_util import (
+from pathopatch.utils.patch_util import (
     DeepZoomGeneratorOS,
     calculate_background_ratio,
     get_intersected_labels,
@@ -24,9 +24,9 @@ from pathopatcher.utils.patch_util import (
     patch_to_tile_size,
     standardize_brightness,
 )
-from pathopatcher.utils.tools import module_exists
+from pathopatch.utils.tools import module_exists
 
-from pathopatcher import logger
+from pathopatch import logger
 
 
 def process_batch(
@@ -107,7 +107,7 @@ def process_batch(
     if module_exists("cucim", error="ignore"):
         from cucim import CuImage
 
-        from pathopatcher.deepzoom.cucim_deepzoom import DeepZoomGeneratorCucim
+        from pathopatch.deepzoom.cucim_deepzoom import DeepZoomGeneratorCucim
 
         generator_module = DeepZoomGeneratorCucim
         image_loader = CuImage

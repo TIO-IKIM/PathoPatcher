@@ -10,10 +10,10 @@ import yaml
 from numpy.testing import assert_almost_equal
 from PIL import Image
 
-from pathopatcher.cli import PreProcessingConfig, PreProcessingYamlConfig
-from pathopatcher.patch_extraction.patch_extraction import PreProcessor
-from pathopatcher.utils.logger import Logger
-from pathopatcher.utils.tools import close_logger
+from pathopatch.cli import PreProcessingConfig, PreProcessingYamlConfig
+from pathopatch.patch_extraction.patch_extraction import PreProcessor
+from pathopatch.utils.logger import Logger
+from pathopatch.utils.tools import close_logger
 from test_database.download import check_test_database
 
 

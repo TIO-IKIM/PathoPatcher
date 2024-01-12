@@ -1,4 +1,12 @@
+#!/usr/bin/env python
+
 # -*- coding: utf-8 -*-
+# Main entry point for Macenko
+#
+# @ Fabian Hörst, fabian.hoerst@uk-essen.de
+# Institute for Artifical Intelligence in Medicine,
+# University Medicine Essen
+
 import inspect
 import logging
 import os
@@ -15,10 +23,11 @@ sys.path.insert(0, parentdir)
 parentdir = os.path.dirname(parentdir)
 sys.path.insert(0, parentdir)
 
-from pathopatcher.cli import MacenkoParser
-from pathopatcher.patch_extraction.patch_extraction import PreProcessor
+from pathopatch.cli import MacenkoParser
+from pathopatch.patch_extraction.patch_extraction import PreProcessor
 
-if __name__ == "__main__":
+
+def main():
     configuration_parser = MacenkoParser()
     configuration, logger = configuration_parser.get_config()
 
@@ -28,3 +37,7 @@ if __name__ == "__main__":
     )
 
     logger.info("Finished Macenko Vector Calculation!")
+
+
+if __name__ == "__main__":
+    main()

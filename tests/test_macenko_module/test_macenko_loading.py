@@ -5,11 +5,11 @@ import numpy as np
 import yaml
 from numpy.testing import assert_array_equal
 
-from pathopatcher.cli import (
+from pathopatch.cli import (
     PreProcessingConfig,
     PreProcessingYamlConfig,
 )
-from pathopatcher.utils.patch_util import NormalizeParameters
+from pathopatch.utils.patch_util import NormalizeParameters
 from test_database.download import check_test_database
 
 

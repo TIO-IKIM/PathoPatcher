@@ -22,7 +22,7 @@ from rasterio.mask import mask as rasterio_mask
 from shapely.affinity import scale
 from shapely.geometry import Polygon
 
-from pathopatcher import logger
+from pathopatch import logger
 
 
 def generate_tissue_mask(
