@@ -26,7 +26,6 @@ setup(
         "colorama",
         "future",
         "geojson>=3.0.0",
-        "histolab==0.6.0",
         "matplotlib",
         "natsort",
         "numpy>1.22,<1.24",
