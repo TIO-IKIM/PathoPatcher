@@ -25,7 +25,7 @@ setup(
         "Shapely==1.8.5.post1",
         "colorama",
         "future",
-        "geojson==3.0.0",
+        "geojson>=3.0.0",
         "histolab==0.6.0",
         "matplotlib",
         "natsort",
