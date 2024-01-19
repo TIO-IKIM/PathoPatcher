@@ -16,8 +16,7 @@ dependencies:
     - flake8-html==0.4.3
     - flake8==6.0.0
     - genbadge==1.1.0
-    - geojson==3.0.0
-    - histolab==0.6.0
+    - geojson>=3.0.0
     - matplotlib==3.7.1
     - natsort==8.4.0
     - numpy>1.22,<1.24
