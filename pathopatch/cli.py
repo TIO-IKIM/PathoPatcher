@@ -577,9 +577,14 @@ class PreProcessingParser(ABCParser):
             help="Select hardware device (just if available, otherwise always cucim). Defaults to cucim.",
         )
         parser.add_argument(
-            "--wsi_properties",
-            type=dict,
-            help="Dictionary with manual WSI metadata, but just applies if metadata cannot be derived from OpenSlide (e.g., for .tiff files). Supported keys are slide_mpp and magnification",
+            "--wsi_magnification",
+            type=float,
+            help="Manual WSI magnification, but just applies if metadata cannot be derived from OpenSlide (e.g., for .tiff files).",
+        )
+        parser.add_argument(
+            "--wsi_mpp",
+            type=float,
+            help="Manual WSI MPP, but just applies if metadata cannot be derived from OpenSlide (e.g., for .tiff files).",
         )
 
         self.parser = parser
@@ -608,6 +613,16 @@ class PreProcessingParser(ABCParser):
                 raise ValueError("Please provide config file as `.yaml` file")
             with open(opt.config, "r") as config_file:
                 yaml_config = yaml.safe_load(config_file)
+                if "wsi_magnification" in yaml_config or "wsi_mpp" in yaml_config:
+                    yaml_config["wsi_properties"] = {}
+                if "wsi_magnification" in yaml_config:
+                    yaml_config["wsi_properties"]["magnification"] = yaml_config[
+                        "wsi_magnification"
+                    ]
+                    yaml_config.pop("wsi_magnification")
+                if "wsi_mpp" in yaml_config:
+                    yaml_config["wsi_properties"]["slide_mpp"] = yaml_config["wsi_mpp"]
+                    yaml_config.pop("wsi_mpp")
                 yaml_config = PreProcessingYamlConfig(**yaml_config)
 
                 # convert to dict and override missing values
@@ -622,6 +637,16 @@ class PreProcessingParser(ABCParser):
         else:
             opt_dict = vars(opt)
             opt_dict = {k: v for k, v in opt_dict.items() if v is not None}
+            if "wsi_magnification" in opt_dict or "wsi_mpp" in opt_dict:
+                opt_dict["wsi_properties"] = {}
+            if "wsi_magnification" in opt_dict:
+                opt_dict["wsi_properties"]["magnification"] = opt_dict[
+                    "wsi_magnification"
+                ]
+                opt_dict.pop("wsi_magnification")
+            if "wsi_mpp" in opt_dict:
+                opt_dict["wsi_properties"]["slide_mpp"] = opt_dict["wsi_mpp"]
+                opt_dict.pop("wsi_mpp")
 
         # generate final setup
         self.preprocessconfig = PreProcessingConfig(**opt_dict)
