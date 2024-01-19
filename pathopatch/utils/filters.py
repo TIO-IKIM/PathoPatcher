@@ -28,7 +28,7 @@ from functools import reduce
 from typing import Any, Callable, List, Union
 
 import numpy as np
-import PIL
+from PIL import Image
 from skimage.util.dtype import img_as_ubyte
 
 try:
@@ -37,7 +37,7 @@ except ImportError:
     from typing_extensions import Protocol, runtime_checkable
 
 
-def np_to_pil(np_img: np.ndarray) -> PIL.Image.Image:
+def np_to_pil(np_img: np.ndarray) -> Image.Image:
     """Convert a NumPy array to a PIL Image.
 
     Parameters
@@ -47,7 +47,7 @@ def np_to_pil(np_img: np.ndarray) -> PIL.Image.Image:
 
     Returns
     -------
-    PIL.Image.Image
+    Image.Image
         The image represented as PIL Image
     """
 
@@ -66,22 +66,22 @@ def np_to_pil(np_img: np.ndarray) -> PIL.Image.Image:
         "float64": _transform_float(np_img),
     }
     image_array = types_factory.get(str(np_img.dtype), np_img.astype(np.uint8))
-    return PIL.Image.fromarray(image_array)
+    return Image.fromarray(image_array)
 
 
-def apply_mask_image(img: PIL.Image.Image, mask: np.ndarray) -> PIL.Image.Image:
+def apply_mask_image(img: Image.Image, mask: np.ndarray) -> Image.Image:
     """Mask image with the provided binary mask.
 
     Parameters
     ----------
-    img : PIL.Image.Image
+    img : Image.Image
         Input image
     mask : np.ndarray
         Binary mask
 
     Returns
     -------
-    PIL.Image.Image
+    Image.Image
         Image with the mask applied
     """
     img_arr = np.array(img)
@@ -97,7 +97,7 @@ def apply_mask_image(img: PIL.Image.Image, mask: np.ndarray) -> PIL.Image.Image:
 
 
 def red_filter(
-    img: PIL.Image.Image, red_thresh: int, green_thresh: int, blue_thresh: int
+    img: Image, red_thresh: int, green_thresh: int, blue_thresh: int
 ) -> np.ndarray:
     """Mask reddish colors in an RGB image.
 
@@ -107,7 +107,7 @@ def red_filter(
 
     Parameters
     ----------
-    img : PIL.Image.Image
+    img : Image
         Input RGB image
     red_thresh : int
         Red channel lower threshold value.
@@ -136,7 +136,7 @@ def red_filter(
 
 
 def green_filter(
-    img: PIL.Image.Image, red_thresh: int, green_thresh: int, blue_thresh: int
+    img: Image, red_thresh: int, green_thresh: int, blue_thresh: int
 ) -> np.ndarray:
     """Filter out greenish colors in an RGB image.
     The mask is based on a pixel being above a red channel threshold value, below a
@@ -147,7 +147,7 @@ def green_filter(
 
     Parameters
     ----------
-    img : PIL.Image.Image
+    img : Image.Image
         RGB input image.
     red_thresh : int
         Red channel upper threshold value.
@@ -176,7 +176,7 @@ def green_filter(
 
 
 def blue_filter(
-    img: PIL.Image.Image, red_thresh: int, green_thresh: int, blue_thresh: int
+    img: Image.Image, red_thresh: int, green_thresh: int, blue_thresh: int
 ) -> np.ndarray:
     """Filter out blueish colors in an RGB image.
 
@@ -186,7 +186,7 @@ def blue_filter(
 
     Parameters
     ----------
-    img : PIL.Image.Image
+    img : Image.Image
         Input RGB image
     red_thresh : int
         Red channel lower threshold value.
@@ -213,7 +213,7 @@ def blue_filter(
     return red | green | blue
 
 
-def red_pen_filter(img: PIL.Image.Image) -> PIL.Image.Image:
+def red_pen_filter(img: Image.Image) -> Image.Image:
     """Filter out red pen marks on diagnostic slides.
 
     The resulting mask is a composition of red filters with different thresholds
@@ -221,12 +221,12 @@ def red_pen_filter(img: PIL.Image.Image) -> PIL.Image.Image:
 
     Parameters
     ----------
-    img : PIL.Image.Image
+    img : Image.Image
         Input RGB image.
 
     Returns
     -------
-    PIL.Image.Image
+    Image.Image
         Input image with the pen marks filtered out.
     """
     parameters = [
@@ -245,7 +245,7 @@ def red_pen_filter(img: PIL.Image.Image) -> PIL.Image.Image:
     return apply_mask_image(img, red_pen_filter_img)
 
 
-def green_pen_filter(img: PIL.Image.Image) -> PIL.Image.Image:
+def green_pen_filter(img: Image.Image) -> Image.Image:
     """Filter out green pen marks from a diagnostic slide.
 
     The resulting mask is a composition of green filters with different thresholds
@@ -253,12 +253,12 @@ def green_pen_filter(img: PIL.Image.Image) -> PIL.Image.Image:
 
     Parameters
     ---------
-    img : PIL.Image.Image
+    img : Image.Image
         Input RGB image
 
     Returns
     -------
-    PIL.Image.Image
+    Image.Image
         Input image with the green pen marks filtered out.
     """
     parameters = [
@@ -285,7 +285,7 @@ def green_pen_filter(img: PIL.Image.Image) -> PIL.Image.Image:
     return apply_mask_image(img, green_pen_filter_img)
 
 
-def blue_pen_filter(img: PIL.Image.Image) -> PIL.Image.Image:
+def blue_pen_filter(img: Image.Image) -> Image.Image:
     """Filter out blue pen marks from a diagnostic slide.
 
     The resulting mask is a composition of green filters with different thresholds
@@ -293,12 +293,12 @@ def blue_pen_filter(img: PIL.Image.Image) -> PIL.Image.Image:
 
     Parameters
     ---------
-    img : PIL.Image.Image
+    img : Image.Image
         Input RGB image
 
     Returns
     -------
-    PIL.Image.Image
+    Image.Image
         Input image with the blue pen marks filtered out.
     """
     parameters = [
@@ -328,8 +328,8 @@ class Filter(Protocol):
 
     @abstractmethod
     def __call__(
-        self, img: Union[PIL.Image.Image, np.ndarray]
-    ) -> Union[PIL.Image.Image, np.ndarray]:
+        self, img: Union[Image.Image, np.ndarray]
+    ) -> Union[Image.Image, np.ndarray]:
         pass  # pragma: no cover
 
     def __repr__(self) -> str:
@@ -341,7 +341,7 @@ class ImageFilter(Filter, Protocol):
     """Image filter protocol"""
 
     @abstractmethod
-    def __call__(self, img: PIL.Image.Image) -> Union[PIL.Image.Image, np.ndarray]:
+    def __call__(self, img: Image.Image) -> Union[Image.Image, np.ndarray]:
         pass  # pragma: no cover
 
 
@@ -353,12 +353,12 @@ class RedPenFilter(ImageFilter):
 
     Parameters
     ----------
-    img : PIL.Image.Image
+    img : Image.Image
         Input RGB image.
 
     Returns
     -------
-    PIL.Image.Image
+    Image.Image
         Image the green red marks filtered out.
 
 
@@ -370,7 +370,7 @@ class RedPenFilter(ImageFilter):
         >>> image_no_red = red_pen_filter(image_rgb)
     """
 
-    def __call__(self, img: PIL.Image.Image):
+    def __call__(self, img: Image.Image):
         return red_pen_filter(img)
 
 
@@ -384,12 +384,12 @@ class GreenPenFilter(ImageFilter):
 
     Parameters
     ---------
-    img : PIL.Image.Image
+    img : Image.Image
         Input RGB image
 
     Returns
     -------
-    PIL.Image.Image
+    Image.Image
         Image the green pen marks filtered out.
 
 
@@ -401,7 +401,7 @@ class GreenPenFilter(ImageFilter):
         >>> image_no_green = green_pen_filter(image_rgb)
     """  # noqa
 
-    def __call__(self, img: PIL.Image.Image) -> PIL.Image.Image:
+    def __call__(self, img: Image.Image) -> Image.Image:
         return green_pen_filter(img)
 
 
@@ -413,7 +413,7 @@ class BluePenFilter(ImageFilter):
 
     Parameters
     ---------
-    img : PIL.Image.Image
+    img : Image.Image
         Input RGB image
 
     Returns
@@ -430,5 +430,5 @@ class BluePenFilter(ImageFilter):
         >>> image_no_blue = blue_pen_filter(image_rgb)
     """  # noqa
 
-    def __call__(self, img: PIL.Image.Image) -> PIL.Image.Image:
+    def __call__(self, img: Image.Image) -> Image.Image:
         return blue_pen_filter(img)
