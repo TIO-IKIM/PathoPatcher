@@ -630,8 +630,14 @@ class PreProcessingParser(ABCParser):
 
                 for k, v in opt_dict.items():
                     if v is None:
-                        if yaml_config_dict[k] is not None:
-                            opt_dict[k] = yaml_config_dict[k]
+                        try:
+                            if yaml_config_dict[k] is not None:
+                                opt_dict[k] = yaml_config_dict[k]
+                        except KeyError:
+                            pass
+                opt_dict.update(
+                    {k: v for k, v in yaml_config_dict.items() if k not in opt_dict}
+                )
                 opt_dict = {k: v for k, v in opt_dict.items() if v is not None}
 
         else:

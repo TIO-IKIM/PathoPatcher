@@ -6,12 +6,12 @@
 # University Medicine Essen
 
 
-import os
-
 import csv
 import json
 import multiprocessing
+import os
 import random
+import re
 from pathlib import Path
 from shutil import rmtree
 from typing import Any, Callable, List, Tuple, Union
@@ -34,10 +34,7 @@ from tqdm import tqdm
 from pathopatch import logger
 from pathopatch.cli import PreProcessingConfig
 from pathopatch.patch_extraction.storage import Storage
-from pathopatch.utils.exceptions import (
-    UnalignedDataException,
-    WrongParameterException,
-)
+from pathopatch.utils.exceptions import UnalignedDataException, WrongParameterException
 from pathopatch.utils.patch_dataset import load_tissue_detection_dl
 from pathopatch.utils.patch_util import (
     DeepZoomGeneratorOS,
@@ -458,7 +455,7 @@ class PreProcessor(object):
         model = mobilenet_v3_small().to(device=self.detector_device)
         model.classifier[-1] = nn.Linear(1024, 4)
         checkpoint = torch.load(
-            "./pathopatch/data/tissue_detector.pt", # this causes errors
+            "./pathopatch/data/tissue_detector.pt",  # this causes errors
             map_location=self.detector_device,
         )
         model.load_state_dict(checkpoint["model_state_dict"])
@@ -787,10 +784,25 @@ class PreProcessor(object):
             and "slide_mpp" in self.config.wsi_properties
         ):
             slide_mpp = self.config.wsi_properties["slide_mpp"]
-        else:
-            raise NotImplementedError(
-                "MPP must be defined either by metadata or by config file!"
-            )
+        else:  # last option is to use regex
+            try:
+                pattern = re.compile(r"MPP(?: =)? (\d+\.\d+)")
+                # Use the pattern to find the match in the string
+                match = pattern.search(slide.properties["openslide.comment"])
+                # Extract the float value
+                if match:
+                    slide_mpp = float(match.group(1))
+                    logger.warning(
+                        f"MPP {slide_mpp:.4f} was extracted from the comment of the WSI (Tiff-Metadata comment string) - Please check for correctness!"
+                    )
+                else:
+                    raise NotImplementedError(
+                        "MPP must be defined either by metadata or by config file!"
+                    )
+            except:
+                raise NotImplementedError(
+                    "MPP must be defined either by metadata or by config file!"
+                )
 
         if "openslide.objective-power" in slide.properties:
             slide_mag = float(slide.properties.get("openslide.objective-power"))

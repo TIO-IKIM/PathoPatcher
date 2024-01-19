@@ -13,6 +13,7 @@ notebooks
 # local configs
 .vscode
 tests/tmp_results_folder/*
+local_debug
 
 # Build
 pathopatch.egg-info/

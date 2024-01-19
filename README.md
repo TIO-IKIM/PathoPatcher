@@ -47,14 +47,14 @@ In general, our framework has the following commands registered in your shell:
 > annotation_conversion: Can be used to convert annotations
 > macenko_vector_generation: To generate new macenko vectors for a new dataset, if custom vectors are tend to be used
 
-#### Option1: Config.yaml
+#### Option 1: Config.yaml
 Arguments are passed via CLIs. In addition to the CLI, also a configuration file can be passed via
 ```bash
 wsi_extraction --config path/to/config.yaml
 ```
 Exemplary configuration file: [patch_extraction.yaml](examples/patch_extraction.yaml).
 
-#### Option1: CLI
+#### Option 2: CLI
 
 The CLI of the main script for patch extraction ([wsi_extraction](patopatch/wsi_extraction.py)) is as follows:
 
@@ -244,7 +244,11 @@ options:
                         derived from OpenSlide (e.g., for .tiff files). (default:
                         None)
 ```
+#### Option 3: CLI + Config
+Both can be combined, but arguments in the CLI have precedence!
 
+
+#### Helpful ressources
 **Label-Map**:
 
 An exemplary `label_map.json` file is shown below. It is important that the background label always has a 0 assigned as integer value

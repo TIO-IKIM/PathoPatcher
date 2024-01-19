@@ -1,7 +1,7 @@
 from importlib.metadata import entry_points
 from setuptools import find_packages, setup
 
-VERSION = "0.9.0b"
+VERSION = "0.9.1"
 DESCRIPTION = "PathoPatch - Accelerating Artificial Intelligence Based Whole Slide Image Analysis with an Optimized Preprocessing Pipeline"
 with open("docs/README_pypi.md", "r") as fh:
     LONG_DESCRIPTION = fh.read()
@@ -17,7 +17,7 @@ setup(
     long_description=LONG_DESCRIPTION,
     url="https://github.com/TIO-IKIM/PathoPatcher",
     long_description_content_type="text/markdown",
-    packages=find_packages(),
+    packages=find_packages(exclude=["tests", "tests.*"]),
     python_requires=">=3.9",
     install_requires=[
         "Pillow>=9.5.0",
