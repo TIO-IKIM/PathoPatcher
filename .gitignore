@@ -18,3 +18,4 @@ tests/tmp_results_folder/*
 pathopatch.egg-info/
 dist
 build
+push_build.yml

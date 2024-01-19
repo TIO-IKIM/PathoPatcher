@@ -77,3 +77,4 @@ log_path:                     # Path where log files should be stored. Otherwise
 log_level:                    # Set the logging level. [str][Optional, defaults to info]
 hardware_selection:           # Select hardware device (just if available, otherwise always cucim). [str] [Optional, defaults to cucim]
 wsi_properties:               # Dictionary with manual WSI metadata. Required keys are: ... TODO: add keys [dict] [Optional, default selection from files]
+# TODO: Change WSI properties to mpp and magnification

@@ -10,10 +10,10 @@
 import sys
 import os
 
-# project_root = os.path.dirname(os.path.abspath(__file__))
-# sys.path.append(project_root)
-# project_root = os.path.dirname(os.path.abspath(project_root))
-# sys.path.append(project_root)
+project_root = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(project_root)
+project_root = os.path.dirname(os.path.abspath(project_root))
+sys.path.append(project_root)
 
 import logging
 
