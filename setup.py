@@ -1,7 +1,6 @@
-from importlib.metadata import entry_points
 from setuptools import find_packages, setup
 
-VERSION = "0.9.1b"
+VERSION = "0.9.2b"
 DESCRIPTION = "PathoPatch - Accelerating Artificial Intelligence Based Whole Slide Image Analysis with an Optimized Preprocessing Pipeline"
 with open("docs/README_pypi.md", "r") as fh:
     LONG_DESCRIPTION = fh.read()
