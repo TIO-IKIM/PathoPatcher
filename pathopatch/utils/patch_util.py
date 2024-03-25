@@ -263,6 +263,7 @@ def compute_interesting_patches(
     mask_otsu: bool = False,
     otsu_annotation: Union[List[str], str] = "object",
     apply_prefilter: bool = False,
+    fast_mode: bool = False,
 ) -> Tuple[List[Tuple[int, int, float]], dict, dict]:
     """Compute interesting patches for a WSI.
 
@@ -297,6 +298,7 @@ def compute_interesting_patches(
         otsu_annotation (Union[List[str], str], optional): List with annotation names or string with annotation name to use for a masked otsu thresholding.
             Defaults to "object".
         apply_prefilter (bool, optional): If a prefilter should be used to remove markers before applying otsu. Defaults to False.
+        fast_mode (bool, optional): If fast mode is used, no annotation masks for plotting are generated. Defaults to False.
 
     Returns:
         Tuple[List[Tuple[int, int, float]], dict, dict]:
@@ -472,7 +474,7 @@ def compute_interesting_patches(
         "tissue_grid": tissue_grid,
     }
     mask_images_annotations = {}
-    if polygons is not None:
+    if polygons is not None and not fast_mode:
         if len(polygons) != 0:
             mask_images_annotations = generate_polygon_overview(
                 polygons=polygons,

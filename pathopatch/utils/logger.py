@@ -56,7 +56,7 @@ class ColoredFormatter(logging.Formatter):
 
 
 class Logger:
-    """ "A Logger for sys-logging and RotatingFileHandler-logging using the python logging module.
+    """A Logger for sys-logging and RotatingFileHandler-logging using the python logging module.
 
     Initialize a Logger for sys-logging and RotatingFileHandler-logging by using python logging module.
     The logger can be used out of the box without any changes, but is also adaptable for specific use cases.

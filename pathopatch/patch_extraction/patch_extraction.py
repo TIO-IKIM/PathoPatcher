@@ -15,7 +15,6 @@ import re
 from pathlib import Path
 from shutil import rmtree
 from typing import Any, Callable, List, Tuple, Union
-
 import matplotlib
 import torch
 
@@ -990,7 +989,7 @@ class PreProcessor(object):
             wsi_file (Union[Path, str]): Path to the WSI file from which the patches should be extracted from
             wsi_metadata (dict): Dictionary with important WSI metadata
             level (int): The tile level for sampling.
-            polygons (List[Polygon]): Annotations of this WSI as a list of polygons (referenced to highest level of WSI).
+            polygons (List[Polygon]): Annotations of this WSI as a list of polygons -> on reference downsample level
                 If no annotations, pass an empty list [].
             region_labels (List[str]): List of labels for the annotations provided as polygons parameter.
             If no annotations, pass an empty list [].
@@ -1085,7 +1084,9 @@ class PreProcessor(object):
                 )
                 intersected_labels = []  # Zero means background
                 ratio = {}
-                patch_mask = np.zeros((tile_size, tile_size), dtype=np.uint8)
+                patch_mask = np.zeros(
+                    (tile_size, tile_size), dtype=np.uint8
+                )  # TODO: continue missing?
             else:
                 intersected_labels, ratio, patch_mask = get_intersected_labels(
                     tile_size=tile_size,
@@ -1094,16 +1095,16 @@ class PreProcessor(object):
                     row=row,
                     polygons=polygons,
                     label_map=self.config.label_map,
-                    min_intersection_ratio=0,  # self.config.min_intersection_ratio,
+                    min_intersection_ratio=0,  # self.config.min_intersection_ratio, # TODO: check
                     region_labels=region_labels,
                     overlapping_labels=self.config.overlapping_labels,
                     store_masks=self.config.store_masks,
                 )
-                background_ratio = 1 - np.sum(ratio)
+                if len(ratio) != 0:
+                    background_ratio = 1 - np.sum(ratio)
                 ratio = {k: v for k, v in zip(intersected_labels, ratio)}
             if len(intersected_labels) == 0 and self.config.save_only_annotated_patches:
                 continue
-
             patch_metadata = {
                 "row": row,
                 "col": col,
@@ -1141,19 +1142,6 @@ class PreProcessor(object):
                 # patches = standardize_brightness(patches)
                 # for scale, scale_patch in context_patches.items():
                 #     context_patches[scale] = standardize_brightness(scale_patch)
-                #     context_patches[scale] = standardize_brightness(scale_patch)
-            if self.config.normalize_stains:
-                patch, _, _ = macenko_normalization(
-                    [patch],
-                    normalization_vector_path=self.config.normalization_vector_json,
-                )
-                patch = patch[0]
-                for c_scale, scale_patch in context_patches.items():
-                    c_patch, _, _ = macenko_normalization(
-                        [scale_patch],
-                        normalization_vector_path=self.config.normalization_vector_json,
-                    )
-                    context_patches[c_scale] = c_patch[0]
                 #     context_patches[scale] = standardize_brightness(scale_patch)
             if self.config.normalize_stains:
                 patch, _, _ = macenko_normalization(
