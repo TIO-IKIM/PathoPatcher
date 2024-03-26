@@ -171,7 +171,7 @@ class PreProcessingDatasetConfig(BaseModel):
                 raise ValueError("Only JSON annotations are supported")
 
 
-class PatchWSIDataset(Dataset):
+class LivePatchWSIDataset(Dataset):
     def __init__(
         self,
         slide_processor_config: PreProcessingDatasetConfig,

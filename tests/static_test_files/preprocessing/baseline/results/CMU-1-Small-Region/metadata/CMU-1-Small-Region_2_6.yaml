@@ -1,6 +1,6 @@
 row: 2
 col: 6
-background_ratio: 1.0
+background_ratio: 0.8046112060546875
 intersected_labels: []
 label_ratio: {}
 metadata_path: ./metadata/CMU-1-Small-Region_2_6.yaml
