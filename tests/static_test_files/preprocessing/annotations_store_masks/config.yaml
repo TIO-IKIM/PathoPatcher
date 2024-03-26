@@ -9,12 +9,12 @@ annotation_extension: json
 incomplete_annotations: True
 label_map_file: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/test_database/input/label_map.json
 save_only_annotated_patches: False
-save_context_without_mask: False 
+save_context_without_mask: False
 exclude_classes: []
 store_masks: True
 
 # basic setups
-target_mag: 5 
+target_mag: 5
 patch_size: 1024
 patch_overlap: 25
 normalize_stains: False

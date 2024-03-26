@@ -6,7 +6,6 @@
 # University Medicine Essen
 import sys
 
-from click import Option
 
 sys.path.append("/Users/fhoerst/Fabian-Projekte/Preprocessing/PathoPatcher")
 
@@ -703,11 +702,12 @@ class LivePatchWSIDataloader:
         self.shuffle = shuffle
         self.seed = seed
         self.element_list = list(range(len(self.dataset)))
+        self.i = 0
+        self.discard_count = 0
 
         if self.shuffle:
             grtr = np.random.default_rng(seed)
             self.element_list = grtr.permutation(self.element_list)
-        self.i = 0
 
     def __iter__(self):
         self.i = 0

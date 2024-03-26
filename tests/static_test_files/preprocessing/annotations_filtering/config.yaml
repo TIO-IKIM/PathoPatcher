@@ -9,7 +9,7 @@ annotation_extension: json
 incomplete_annotations: True
 label_map_file: ./test_database/input/label_map.json
 save_only_annotated_patches: False
-save_context_without_mask: False 
+save_context_without_mask: False
 exclude_classes: ["Cyst"]
 store_masks: False
 

@@ -25,7 +25,7 @@
 
 from abc import abstractmethod
 from functools import reduce
-from typing import Any, Callable, List, Union
+from typing import Union
 
 import numpy as np
 from PIL import Image

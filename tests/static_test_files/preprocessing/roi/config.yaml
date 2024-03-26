@@ -9,7 +9,7 @@ annotation_extension: json
 incomplete_annotations: True
 label_map_file: ./test_database/input/label_map.json
 save_only_annotated_patches: False
-save_context_without_mask: False 
+save_context_without_mask: False
 exclude_classes: []
 store_masks: False
 
@@ -21,7 +21,7 @@ normalize_stains: False
 min_intersection_ratio: 0.05
 tissue_annotation: ROI
 tissue_annotation_intersection_ratio: 1.0
-filter_patches: True 
+filter_patches: True
 apply_prefilter: True
 
 processes: 8
