@@ -766,13 +766,15 @@ if __name__ == "__main__":
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     logger.info("Test")
-    config = LivePatchWSIConfig(
+    patch_config = LivePatchWSIConfig(
         wsi_path="/Users/fhoerst/Fabian-Projekte/Selocan/RicardoScans/266819.svs",
         patch_size=256,
         patch_overlap=0,
         target_mpp=0.3,
         target_mpp_tolerance=0.1,
     )
-    ps_dataset = LivePatchWSIDataset(config, logger)
-    ps_dataloader = LivePatchWSIDataloader(ps_dataset, batch_size=8)
-    ps_dataloader.__next__()
+    patch_dataset = LivePatchWSIDataset(patch_config, logger)
+    patch_dataloader = LivePatchWSIDataloader(patch_dataset, batch_size=8)
+    for batch in patch_dataloader:
+        pass
+    # ps_dataloader.__next__()
