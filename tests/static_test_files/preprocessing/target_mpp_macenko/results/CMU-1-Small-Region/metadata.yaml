@@ -1,5 +1,5 @@
-orig_n_tiles_cols: 2
-orig_n_tiles_rows: 3
+orig_n_tiles_cols: 4
+orig_n_tiles_rows: 5
 base_magnification: 20.0
 downsampling: 2
 label_map:
@@ -9,7 +9,7 @@ patch_size: 256
 base_mpp: 0.499
 target_patch_mpp: 1.2
 stain_normalization: true
-magnification: 4.158333333333334
+magnification: 8.316666666666668
 level: 11
 patch_distribution:
   0: 0

@@ -331,3 +331,30 @@ TBD
 <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/TIO-IKIM/PathoPatcher">PathoPatcher</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/FabianHoerst">Fabian Hörst, University Hospital Essen,</a> is licensed under <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0
 
   <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1"></a></p>
+
+## Citation
+```latex
+@InProceedings{10.1007/978-3-658-44037-4_91,
+    author="H{\"o}rst, Fabian
+            and Schaheer, Sajad H.
+            and Baldini, Giulia
+            and Bahnsen, Fin H.
+            and Egger, Jan
+            and Kleesiek, Jens",
+    editor="Maier, Andreas
+            and Deserno, Thomas M.
+            and Handels, Heinz
+            and Maier-Hein, Klaus
+            and Palm, Christoph
+            and Tolxdorff, Thomas",
+    title="Accelerating Artificial Intelligence-based Whole Slide Image Analysis with an Optimized Preprocessing Pipeline",
+    booktitle="Bildverarbeitung f{\"u}r die Medizin 2024",
+    year="2024",
+    publisher="Springer Fachmedien Wiesbaden",
+    address="Wiesbaden",
+    pages="356--361",,
+    isbn="978-3-658-44037-4"
+}
+
+
+```

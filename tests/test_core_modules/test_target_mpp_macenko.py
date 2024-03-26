@@ -85,18 +85,18 @@ class TestPreProcessorDownsample(unittest.TestCase):
 
         self.assertEqual(yaml_config, test_file)
 
-    # def test_macenko_patch(self) -> None:
-    #     """Test if Macenko worked correctly"""
-    #     gt_path = (
-    #         self.gt_folder / self.wsi_name / "patches" / "CMU-1-Small-Region_1_1.png"
-    #     )
-    #     gt_image = np.array(Image.open(gt_path.resolve()))
+    def test_macenko_patch(self) -> None:
+        """Test if Macenko worked correctly"""
+        gt_path = (
+            self.gt_folder / self.wsi_name / "patches" / "CMU-1-Small-Region_1_1.png"
+        )
+        gt_image = np.array(Image.open(gt_path.resolve()))
 
-    #     test_path = (
-    #         self.slide_processor.config.output_path
-    #         / self.wsi_name
-    #         / "patches"
-    #         / "CMU-1-Small-Region_1_1.png"
-    #     )
-    #     test_image = np.array(Image.open(test_path.resolve()))
-    #     assert_almost_equal(test_image, gt_image)
+        test_path = (
+            self.slide_processor.config.output_path
+            / self.wsi_name
+            / "patches"
+            / "CMU-1-Small-Region_1_1.png"
+        )
+        test_image = np.array(Image.open(test_path.resolve()))
+        assert_almost_equal(test_image, gt_image)

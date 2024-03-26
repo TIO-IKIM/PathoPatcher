@@ -837,9 +837,8 @@ class PreProcessor(object):
                 resulting_mpp = (
                     slide_properties["mpp"]
                     * self.rescaling_factor
-                    / 2
                     * self.config.downsample
-                )
+                )  # TODO: should it be divided by 2 or not?
             else:
                 resulting_mpp = slide_properties["mpp"] * self.config.downsample
         # target mag has precedence before downsample!
