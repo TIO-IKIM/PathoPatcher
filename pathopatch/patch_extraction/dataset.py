@@ -43,8 +43,6 @@ from pathopatch.utils.tools import module_exists
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
-from tqdm import tqdm
-import yaml
 
 
 class LivePatchWSIConfig(BaseModel):
@@ -96,7 +94,7 @@ class LivePatchWSIConfig(BaseModel):
 
     # basic setup
     patch_size: int
-    patch_overlap: int = 0
+    patch_overlap: float = 0.0
     downsample: Optional[int] = 1
     target_mpp: Optional[float]
     target_mag: Optional[float]
@@ -766,35 +764,3 @@ class LivePatchWSIDataloader:
 
     def __len__(self):
         return int(np.ceil((len(self.dataset) - self.discard_count) / self.batch_size))
-
-
-if __name__ == "__main__":
-    """Just for testing purposes"""
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-    logger.info("Test")
-    patch_config = LivePatchWSIConfig(
-        wsi_path="/Users/fhoerst/Fabian-Projekte/Preprocessing/PathoPatcher/test_database/input/WSI/CMU-1-Small-Region.svs",
-        patch_size=400,
-        patch_overlap=25.0,
-        target_mpp=0.499,
-    )
-    outdir = Path(
-        "/Users/fhoerst/Fabian-Projekte/Preprocessing/PathoPatcher/tests/tmp_results_folder/complex_setup_dataset/memory"
-    )
-    outdir.mkdir(parents=True, exist_ok=True)
-    (outdir / "patches").mkdir(parents=True, exist_ok=True)
-    (outdir / "metadata").mkdir(parents=True, exist_ok=True)
-    patch_dataset = LivePatchWSIDataset(patch_config, logger, transforms=None)
-    patch_dataloader = LivePatchWSIDataloader(patch_dataset, batch_size=1)
-    for batch in tqdm(patch_dataloader, total=len(patch_dataloader)):
-        image_tensor = batch[0]
-        metadata = batch[1][0]
-        patch_name = f"CMU-1-Small-Region_{metadata['row']}_{metadata['col']}.png"
-        image_pil = Image.fromarray(image_tensor[0, ...].numpy().astype(np.uint8))
-        image_pil.save(outdir / "patches" / patch_name)
-        metadata.pop("discard_patch")
-        with open(
-            outdir / "metadata" / f"{patch_name.replace('.png', '.yaml')}", "w"
-        ) as f:
-            yaml.dump(metadata, f, sort_keys=False)
