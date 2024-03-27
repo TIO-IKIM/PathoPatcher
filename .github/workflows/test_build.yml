@@ -40,3 +40,5 @@ jobs:
       run: python -m pytest -vv -s ./tests/test_macenko_module
     - name : Run Core Tests
       run: python -m pytest -vv -s ./tests/test_core_modules
+    - name : Run Dataset and Dataloader Tests
+      run: python -m pytest -vv -s ./tests/test_pytorch_dataset

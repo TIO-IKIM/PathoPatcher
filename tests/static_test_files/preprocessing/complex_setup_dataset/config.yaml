@@ -1,0 +1,15 @@
+# dataset paths
+wsi_paths: ./test_database/input/WSI/CMU-1-Small-Region.svs
+output_path: ./tests/tmp_results_folder/complex_setup_dataset
+wsi_extensions: svs
+
+# basic setups
+target_mpp: 0.499
+patch_size: 400
+patch_overlap: 25
+
+processes: 8
+overwrite: True
+
+# other
+log_level: debug

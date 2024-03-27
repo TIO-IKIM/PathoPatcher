@@ -43,6 +43,8 @@ from pathopatch.utils.tools import module_exists
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
+from tqdm import tqdm
+import yaml
 
 
 class LivePatchWSIConfig(BaseModel):
@@ -612,7 +614,7 @@ class LivePatchWSIDataset(Dataset):
         )
 
         if background_ratio > 1 - self.config.min_intersection_ratio:
-            logger.debug(
+            self.logger.debug(
                 f"Removing patch {row}, {col} because of intersection ratio with background is too big"
             )
             discard_patch = True
@@ -639,29 +641,30 @@ class LivePatchWSIDataset(Dataset):
                 background_ratio = 1 - np.sum(ratio)
             ratio = {k: v for k, v in zip(intersected_labels, ratio)}
 
-        if self.config.normalize_stains:
-            image_tile, _, _ = macenko_normalization(
-                [image_tile],
-                normalization_vector_path=self.config.normalization_vector_json,
-            )
+            if self.config.normalize_stains:
+                image_tile, _, _ = macenko_normalization(
+                    [image_tile],
+                    normalization_vector_path=self.config.normalization_vector_json,
+                )
+                image_tile = image_tile[0]
 
-        if self.res_tile_size != self.config.patch_size:
-            image_tile = Image.fromarray(image_tile)
-            if self.res_tile_size > self.config.patch_size:
-                image_tile.thumbnail(
-                    (self.config.patch_size, self.config.patch_size),
-                    getattr(Image, "Resampling", Image).LANCZOS,
-                )
-            else:
-                image_tile = image_tile.resize(
-                    (self.config.patch_size, self.config.patch_size),
-                    getattr(Image, "Resampling", Image).LANCZOS,
-                )
-            image_tile = np.array(image_tile)
-        try:
-            image_tile = self.transforms(image_tile)
-        except TypeError:
-            pass
+            if image_tile.shape[0] != self.config.patch_size:
+                image_tile = Image.fromarray(image_tile)
+                if image_tile.size[-1] > self.config.patch_size:
+                    image_tile.thumbnail(
+                        (self.config.patch_size, self.config.patch_size),
+                        getattr(Image, "Resampling", Image).LANCZOS,
+                    )
+                else:
+                    image_tile = image_tile.resize(
+                        (self.config.patch_size, self.config.patch_size),
+                        getattr(Image, "Resampling", Image).LANCZOS,
+                    )
+                image_tile = np.array(image_tile)
+            try:
+                image_tile = self.transforms(image_tile)
+            except TypeError:
+                pass
 
         patch_metadata = {
             "row": row,
@@ -752,7 +755,11 @@ class LivePatchWSIDataloader:
                 metadata.append(meta)
                 masks.append(mask)
                 batch_item_count += 1
-            patches = torch.stack(patches)
+            if len(patches) > 1:
+                patches = [torch.tensor(f) for f in patches]
+                patches = torch.stack(patches)
+            else:
+                patches = torch.tensor(patches[0][None, ...])
             return patches, metadata, masks
         else:
             raise StopIteration
@@ -767,14 +774,27 @@ if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     logger.info("Test")
     patch_config = LivePatchWSIConfig(
-        wsi_path="/Users/fhoerst/Fabian-Projekte/Selocan/RicardoScans/266819.svs",
-        patch_size=256,
-        patch_overlap=0,
-        target_mpp=0.3,
-        target_mpp_tolerance=0.1,
+        wsi_path="/Users/fhoerst/Fabian-Projekte/Preprocessing/PathoPatcher/test_database/input/WSI/CMU-1-Small-Region.svs",
+        patch_size=400,
+        patch_overlap=25.0,
+        target_mpp=0.499,
     )
-    patch_dataset = LivePatchWSIDataset(patch_config, logger)
-    patch_dataloader = LivePatchWSIDataloader(patch_dataset, batch_size=8)
-    for batch in patch_dataloader:
-        pass
-    # ps_dataloader.__next__()
+    outdir = Path(
+        "/Users/fhoerst/Fabian-Projekte/Preprocessing/PathoPatcher/tests/tmp_results_folder/complex_setup_dataset/memory"
+    )
+    outdir.mkdir(parents=True, exist_ok=True)
+    (outdir / "patches").mkdir(parents=True, exist_ok=True)
+    (outdir / "metadata").mkdir(parents=True, exist_ok=True)
+    patch_dataset = LivePatchWSIDataset(patch_config, logger, transforms=None)
+    patch_dataloader = LivePatchWSIDataloader(patch_dataset, batch_size=1)
+    for batch in tqdm(patch_dataloader, total=len(patch_dataloader)):
+        image_tensor = batch[0]
+        metadata = batch[1][0]
+        patch_name = f"CMU-1-Small-Region_{metadata['row']}_{metadata['col']}.png"
+        image_pil = Image.fromarray(image_tensor[0, ...].numpy().astype(np.uint8))
+        image_pil.save(outdir / "patches" / patch_name)
+        metadata.pop("discard_patch")
+        with open(
+            outdir / "metadata" / f"{patch_name.replace('.png', '.yaml')}", "w"
+        ) as f:
+            yaml.dump(metadata, f, sort_keys=False)

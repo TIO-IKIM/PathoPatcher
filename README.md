@@ -24,11 +24,20 @@ ___
 
 ## Installation
 
+### Prerequisite
+1. Openslide (>= 3.4.1) needs to be installed (either directly https://openslide.org/download/ or via conda)<details>
+        <summary>OpenSlide conda</summary>
+        - Recommended: `conda install conda-forge::openslide=4.0.0` for DICOM support
+        - Generic/minimum version: `conda-forge::openslide>=3.4.1`
+      </details>
+2. Openslide python: `pip install openslide-python`
+3. Optional for speedup: [cuCIM installation instructions](https://github.com/rapidsai/cucim?tab=readme-ov-file#install-cucim)
+
 ### PIP-Package
 The package can be found here: https://pypi.org/project/pathopatch/
 Installation: `pip install pathopatch`
 
-### Developmemnt/from source
+### Development/from source
 1. Clone the repository:
 2. Create a conda environment with Python 3.10.12 version and install conda requirements: `conda env create -f environment.yaml -vv`. You can change the environment name by editing the `name` tag in the environment.yaml file.
 This step is necessary, as we need to install `Openslide` with binary files. This is easier with conda. Otherwise, installation from [source](https://openslide.org/api/python/) needs to be performed and packages installed with pi
@@ -36,9 +45,9 @@ This step is necessary, as we need to install `Openslide` with binary files. Thi
 4. **Optional: cuCIM**
 Run `conda install -c rapidsai cucim` inside your conda environment. This process is time consuming, so you should be patient. Also follow their [official guideline](https://github.com/rapidsai/cucim) if any problems occur.
 
-### Commiting
+### Commiting/Linting
 1. Install pre-commit with `pre-commit install`
-
+This activates pre-commit hooks, files are edited when commited and need to added again as they might change
 
 ## Usage
 We provide different use cases - Offline-Dataset (Store on Disk :floppy_disk:) and Inference-Dataset for :zap: PyTorch :zap:
