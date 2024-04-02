@@ -371,6 +371,9 @@ In our Pre-Processing pipeline, we are able to extract quadratic patches from de
 An example notebook is given [here](PathoPatch.ipynb):
 <a href="https://colab.research.google.com/github/TIO-IKIM/PathoPatcher/blob/main/PathoPatch.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
+### Example config files
+Example config files for various use-cases can be found in the [test database](tests/static_test_files/preprocessing) (tests/static_test_files/preprocessing)
+
 ### DICOM-conversion
 To convert WSI-Files into DICOM-Format, please follow [this documentation](docs/DICOM.md)
 
