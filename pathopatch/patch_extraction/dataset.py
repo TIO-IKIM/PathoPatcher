@@ -27,8 +27,8 @@ from torch.utils.data import Dataset
 from torchvision.transforms.v2 import ToTensor
 from PIL import Image
 from pathopatch.utils.exceptions import WrongParameterException
+from pathopatch.wsi_interfaces.openslide_deepzoom import DeepZoomGeneratorOS
 from pathopatch.utils.patch_util import (
-    DeepZoomGeneratorOS,
     calculate_background_ratio,
     compute_interesting_patches,
     get_intersected_labels,
@@ -284,7 +284,7 @@ class LivePatchWSIDataset(Dataset):
             self.logger.debug("Using CuCIM")
             from cucim import CuImage
 
-            from pathopatch.patch_extraction.cucim_deepzoom import (
+            from pathopatch.wsi_interfaces.cucim_deepzoom import (
                 DeepZoomGeneratorCucim,
             )
 
@@ -451,8 +451,8 @@ class LivePatchWSIDataset(Dataset):
         )
 
         self.tile_extractor = self.deepzoomgenerator(
-            osr=self.slide_openslide,
-            cucim_slide=self.slide,
+            meta_loader=self.slide_openslide,
+            image_loader=self.slide,
             tile_size=self.res_tile_size,
             overlap=self.res_overlap,
             limit_bounds=True,

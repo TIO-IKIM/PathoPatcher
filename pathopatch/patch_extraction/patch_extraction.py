@@ -6,7 +6,6 @@
 # University Medicine Essen
 
 
-import csv
 import json
 import multiprocessing
 import os
@@ -15,6 +14,7 @@ import re
 from pathlib import Path
 from shutil import rmtree
 from typing import Any, Callable, List, Tuple, Union
+
 import matplotlib
 import torch
 
@@ -23,6 +23,7 @@ matplotlib.use("Agg")  # Agg is a non-interactive backend
 import warnings
 
 import numpy as np
+import pandas as pd
 from natsort import natsorted
 from openslide import OpenSlide
 from PIL import Image
@@ -36,7 +37,6 @@ from pathopatch.patch_extraction.storage import Storage
 from pathopatch.utils.exceptions import UnalignedDataException, WrongParameterException
 from pathopatch.utils.patch_dataset import load_tissue_detection_dl
 from pathopatch.utils.patch_util import (
-    DeepZoomGeneratorOS,
     calculate_background_ratio,
     compute_interesting_patches,
     generate_thumbnails,
@@ -52,6 +52,11 @@ from pathopatch.utils.patch_util import (
     target_mpp_to_downsample,
 )
 from pathopatch.utils.tools import end_timer, module_exists, start_timer
+from pathopatch.wsi_interfaces.openslide_deepzoom import DeepZoomGeneratorOS
+from pathopatch.wsi_interfaces.wsidicomizer_openslide import (
+    DicomSlide,
+    DeepZoomGeneratorDicom,
+)
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -195,6 +200,7 @@ class PreProcessor(object):
         detector_transforms (Compose): Tissue detection transforms
         curr_wsi_level (int): Current WSI level
         save_context (bool): Save context flag
+        # TODO: improve and check with new dcm coce and new filelist loading
 
     Methods:
         setup_output_path(output_path: Union[str, Path]) -> None:
@@ -270,6 +276,7 @@ class PreProcessor(object):
 
         self.config = slide_processor_config
         self.files, self.annotation_files = [], []
+        self.global_properties = {}
         self.num_files = 0
         self.rescaling_factor = 1
 
@@ -342,21 +349,33 @@ class PreProcessor(object):
             wsi_filelist (Union[str, Path]):  Path to the CSV file containing the WSI file list.
 
         CSV File Example:
-            The CSV file should contain a single column with the paths to the WSI files.
+            The CSV file should contain the path column, with path to the WSI. slide_mpp and magnification are optional.
             Example content of "wsi_filelist.csv":
             ```
-            /path/to/wsi1.svs
-            /path/to/wsi2.svs
-            /path/to/wsi3.svs
+            path,slide_mpp,magnification
+            test_database/input/WSI/CMU-1.svs,0.499,20
             ```
         """
         self.files = []
-        with open(wsi_filelist, "r") as csv_file:
-            csv_reader = csv.reader(csv_file)
-            for row in csv_reader:
-                self.files.append(Path(row[0]))
-        self.files = natsorted(self.files, key=lambda x: x.name)
+        csv_file = pd.read_csv(wsi_filelist, sep=",")
+
+        self.files = natsorted(csv_file["path"].to_list(), key=lambda x: Path(x).name)
+        self.files = [Path(f) for f in self.files]
         self.num_files = len(self.files)
+
+        for row in csv_file.iterrows():
+            file = row[1]["path"]
+            try:
+                slide_mpp = row[1]["slide_mpp"]
+            except KeyError:
+                slide_mpp = None
+            try:
+                magnification = row[1]["magnification"]
+            except KeyError:
+                magnification = None
+            prop_dict = {"slide_mpp": slide_mpp, "magnification": magnification}
+            prop_dict = {k: v for k, v in prop_dict.items() if v is not None}
+            self.global_properties[Path(file).name] = prop_dict
 
     def _set_annotations_paths(
         self,
@@ -403,23 +422,28 @@ class PreProcessor(object):
             hardware_selection (str, optional): Specify hardware. Just for experiments. Must be either "openslide", or "cucim".
                 Defaults to cucim.
         """
-        if (
-            module_exists("cucim", error="ignore")
-            and hardware_selection.lower() == "cucim"
-        ):
-            logger.info("Using CuCIM")
-            from cucim import CuImage
-
-            from pathopatch.patch_extraction.cucim_deepzoom import (
-                DeepZoomGeneratorCucim,
-            )
-
-            self.deepzoomgenerator = DeepZoomGeneratorCucim
-            self.image_loader = CuImage
+        if self.config.wsi_extension == "dcm":
+            logger.info("Using WsiDicom as WSIReader")
+            self.deepzoomgenerator = DeepZoomGeneratorDicom
+            self.image_loader = DicomSlide
         else:
-            logger.info("Using OpenSlide")
-            self.deepzoomgenerator = DeepZoomGeneratorOS
-            self.image_loader = OpenSlide
+            if (
+                module_exists("cucim", error="ignore")
+                and hardware_selection.lower() == "cucim"
+            ):
+                logger.info("Using CuCIM as WSIReader")
+                from cucim import CuImage
+
+                from pathopatch.wsi_interfaces.cucim_deepzoom import (
+                    DeepZoomGeneratorCucim,
+                )
+
+                self.deepzoomgenerator = DeepZoomGeneratorCucim
+                self.image_loader = CuImage
+            else:
+                logger.info("Using OpenSlide as WSIReader")
+                self.deepzoomgenerator = DeepZoomGeneratorOS
+                self.image_loader = OpenSlide
 
     def _set_tissue_detector(self) -> None:
         """Set up the tissue detection model and transformations.
@@ -774,46 +798,59 @@ class PreProcessor(object):
         logger.info(f"Computing patches for {wsi_file.name}")
 
         # load slide (OS and CuImage/OS)
-        slide = OpenSlide(str(wsi_file))
+        if self.config.wsi_extension == "dcm":
+            slide = DicomSlide(wsi_file)
+        else:
+            slide = OpenSlide(str(wsi_file))
         slide_cu = self.image_loader(str(wsi_file))
-        if "openslide.mpp-x" in slide.properties:
-            slide_mpp = float(slide.properties.get("openslide.mpp-x"))
-        elif (
-            self.config.wsi_properties is not None
-            and "slide_mpp" in self.config.wsi_properties
-        ):
-            slide_mpp = self.config.wsi_properties["slide_mpp"]
-        else:  # last option is to use regex
-            try:
-                pattern = re.compile(r"MPP(?: =)? (\d+\.\d+)")
-                # Use the pattern to find the match in the string
-                match = pattern.search(slide.properties["openslide.comment"])
-                # Extract the float value
-                if match:
-                    slide_mpp = float(match.group(1))
-                    logger.warning(
-                        f"MPP {slide_mpp:.4f} was extracted from the comment of the WSI (Tiff-Metadata comment string) - Please check for correctness!"
-                    )
-                else:
+
+        slide_mpp = None
+        slide_mag = None
+        if str(wsi_file.name) in self.global_properties:
+            slide_properties = self.global_properties[str(wsi_file.name)]
+            if "slide_mpp" in slide_properties:
+                slide_mpp = slide_properties["slide_mpp"]
+            if "magnification" in slide_properties:
+                slide_mag = slide_properties["magnification"]
+        if slide_mpp is None:
+            if "openslide.mpp-x" in slide.properties:
+                slide_mpp = float(slide.properties.get("openslide.mpp-x"))
+            elif (
+                self.config.wsi_properties is not None
+                and "slide_mpp" in self.config.wsi_properties
+            ):
+                slide_mpp = self.config.wsi_properties["slide_mpp"]
+            else:  # last option is to use regex
+                try:
+                    pattern = re.compile(r"MPP(?: =)? (\d+\.\d+)")
+                    # Use the pattern to find the match in the string
+                    match = pattern.search(slide.properties["openslide.comment"])
+                    # Extract the float value
+                    if match:
+                        slide_mpp = float(match.group(1))
+                        logger.warning(
+                            f"MPP {slide_mpp:.4f} was extracted from the comment of the WSI (Tiff-Metadata comment string) - Please check for correctness!"
+                        )
+                    else:
+                        raise NotImplementedError(
+                            "MPP must be defined either by metadata or by config file!"
+                        )
+                except:
                     raise NotImplementedError(
                         "MPP must be defined either by metadata or by config file!"
                     )
-            except:
+        if slide_mag is None:
+            if "openslide.objective-power" in slide.properties:
+                slide_mag = float(slide.properties.get("openslide.objective-power"))
+            elif (
+                self.config.wsi_properties is not None
+                and "magnification" in self.config.wsi_properties
+            ):
+                slide_mag = self.config.wsi_properties["magnification"]
+            else:
                 raise NotImplementedError(
-                    "MPP must be defined either by metadata or by config file!"
+                    "Magnification must be defined either by metadata or by config file!"
                 )
-
-        if "openslide.objective-power" in slide.properties:
-            slide_mag = float(slide.properties.get("openslide.objective-power"))
-        elif (
-            self.config.wsi_properties is not None
-            and "magnification" in self.config.wsi_properties
-        ):
-            slide_mag = self.config.wsi_properties["magnification"]
-        else:
-            raise NotImplementedError(
-                "MPP must be defined either by metadata or by config file!"
-            )
 
         slide_properties = {"mpp": slide_mpp, "magnification": slide_mag}
         # Generate thumbnails
@@ -860,8 +897,8 @@ class PreProcessor(object):
         )
 
         tiles = self.deepzoomgenerator(
-            osr=slide,
-            cucim_slide=slide_cu,
+            meta_loader=slide,
+            image_loader=slide_cu,
             tile_size=tile_size,
             overlap=overlap,
             limit_bounds=True,
@@ -1003,7 +1040,10 @@ class PreProcessor(object):
         context_tiles = {}
 
         # reload image
-        slide = OpenSlide(str(wsi_file))
+        if self.config.wsi_extension == "dcm":
+            slide = DicomSlide(wsi_file)
+        else:
+            slide = OpenSlide(str(wsi_file))
         slide_cu = self.image_loader(str(wsi_file))
 
         tile_size, overlap = patch_to_tile_size(
@@ -1011,8 +1051,8 @@ class PreProcessor(object):
         )
 
         tiles = self.deepzoomgenerator(
-            osr=slide,
-            cucim_slide=slide_cu,
+            meta_loader=slide,
+            image_loader=slide_cu,
             tile_size=tile_size,
             overlap=overlap,
             limit_bounds=True,
@@ -1022,8 +1062,8 @@ class PreProcessor(object):
             for c_scale in self.config.context_scales:
                 overlap_context = int((c_scale - 1) * tile_size / 2) + overlap
                 context_tiles[c_scale] = self.deepzoomgenerator(
-                    osr=slide,
-                    cucim_slide=slide_cu,
+                    meta_loader=slide,
+                    image_loader=slide_cu,
                     tile_size=tile_size,  # tile_size,
                     overlap=overlap_context,  # (1-c_scale) * tile_size / 2,
                     limit_bounds=True,
@@ -1224,8 +1264,8 @@ class PreProcessor(object):
             self.config.patch_size, self.config.patch_overlap, self.rescaling_factor
         )
         tiles = self.deepzoomgenerator(
-            osr=slide,
-            cucim_slide=slide_cu,
+            meta_loader=slide,
+            image_loader=slide_cu,
             tile_size=tile_size,
             overlap=overlap,
             limit_bounds=True,
@@ -1352,8 +1392,8 @@ class PreProcessor(object):
         # extract all patches
         patches = []
         tiles = self.deepzoomgenerator(
-            osr=slide,
-            cucim_slide=slide_cu,
+            meta_loader=slide,
+            image_loader=slide_cu,
             tile_size=tile_size,
             overlap=overlap,
             limit_bounds=True,

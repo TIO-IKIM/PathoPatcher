@@ -1,7 +1,7 @@
 # dataset paths
 wsi_paths: ./test_database/input/WSI/JP2K-33003-1.svs
 output_path: ./tests/tmp_results_folder/roi
-wsi_extensions: svs
+wsi_extension: svs
 
 # annotations
 annotation_paths: ./test_database/input/Annotations

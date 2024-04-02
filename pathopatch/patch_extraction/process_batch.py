@@ -15,8 +15,8 @@ from openslide import OpenSlide
 from PIL import Image
 from shapely.geometry import Polygon
 
+from pathopatch import logger
 from pathopatch.utils.patch_util import (
-    DeepZoomGeneratorOS,
     calculate_background_ratio,
     get_intersected_labels,
     macenko_normalization,
@@ -25,8 +25,7 @@ from pathopatch.utils.patch_util import (
     standardize_brightness,
 )
 from pathopatch.utils.tools import module_exists
-
-from pathopatch import logger
+from pathopatch.wsi_interfaces.openslide_deepzoom import DeepZoomGeneratorOS
 
 
 def process_batch(
@@ -107,7 +106,7 @@ def process_batch(
     if module_exists("cucim", error="ignore"):
         from cucim import CuImage
 
-        from pathopatch.deepzoom.cucim_deepzoom import DeepZoomGeneratorCucim
+        from pathopatch.wsi_interfaces.cucim_deepzoom import DeepZoomGeneratorCucim
 
         generator_module = DeepZoomGeneratorCucim
         image_loader = CuImage
@@ -120,8 +119,8 @@ def process_batch(
     tile_size = patch_to_tile_size(patch_size, patch_overlap)
 
     tiles = generator_module(
-        osr=slide,
-        cucim_slide=slide_cu,
+        meta_loader=slide,
+        image_loader=slide_cu,
         tile_size=tile_size,
         overlap=patch_overlap,
         limit_bounds=True,
@@ -131,8 +130,8 @@ def process_batch(
         for scale in context_scales:
             overlap_context = int((scale - 1) * patch_size / 2) + patch_overlap
             context_tiles[scale] = generator_module(
-                osr=slide,
-                cucim_slide=slide_cu,
+                meta_loader=slide,
+                image_loader=slide_cu,
                 tile_size=tile_size,  # tile_size,
                 overlap=overlap_context,  # (1-scale) * tile_size / 2,
                 limit_bounds=True,

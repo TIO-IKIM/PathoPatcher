@@ -1,7 +1,7 @@
 # dataset paths
 wsi_paths: ./test_database/input/WSI
 output_path: ./tests/output/patch_extraction
-wsi_extensions: svs
+wsi_extension: svs
 
 # basic setups
 downsample: 1

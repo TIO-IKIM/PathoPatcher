@@ -4,7 +4,7 @@ wsi_filelist:                 # Path to a csv-filelist with WSI files (separator
                               # used.Must include full paths to WSIs, including suffixes.Can be used as an replacement for
                               # the wsi_paths option.If both are provided, yields an error. [str] [Optional, defaults to None]
 output_path:                  # Path to the folder where the resulting dataset should be stored [str]
-wsi_extensions:               # The extension of the WSI-files [str] [Optional, defaults to "svs"]
+wsi_extension:               # The extension of the WSI-files [str] [Optional, defaults to "svs"]
 
 # basic setups
 patch_size:                   # The size of the patches in pixel that will be retrieved from the WSI, e.g. 256 for 256px. [][Optional, defaults to 256]
@@ -76,5 +76,6 @@ filter_patches:               # Post-extraction patch filtering to sort out arte
 log_path:                     # Path where log files should be stored. Otherwise, log files are stored in the output folder. [str][Optional, defaults to None]
 log_level:                    # Set the logging level. [str][Optional, defaults to info]
 hardware_selection:           # Select hardware device (just if available, otherwise always cucim). [str] [Optional, defaults to cucim]
-wsi_magnification:            # Manual WSI magnification, but just applies if metadata cannot be derived from OpenSlide (e.g., for .tiff files). [float][Optional, defaults to None]
-wsi_mpp:                      # Manual WSI MPP, but just applies if metadata cannot be derived from OpenSlide (e.g., for .tiff files). [float][Optional, defaults to None]
+wsi_properties:               # If provided, the properties of the WSI are used for the extraction. [str][Optional, defaults to None]
+  magnifcation:               # Manual WSI magnification, but just applies if metadata cannot be derived from OpenSlide (e.g., for .tiff files). [float][Optional, defaults to None]
+  slide_mpp:                  # Manual WSI MPP, but just applies if metadata cannot be derived from OpenSlide (e.g., for .tiff files). [float][Optional, defaults to None]

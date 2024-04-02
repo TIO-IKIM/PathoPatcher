@@ -1,0 +1,12 @@
+# dataset paths
+wsi_filelist: ./tests/static_test_files/preprocessing/filelist/filelist.csv
+output_path: ./tests/tmp_results_folder/filelist
+wsi_extension: svs
+
+# basic setups
+target_mpp: 0.998
+processes: 8
+
+# other
+log_level: debug
+overwrite: True

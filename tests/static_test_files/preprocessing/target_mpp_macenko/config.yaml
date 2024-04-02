@@ -1,7 +1,7 @@
 # dataset paths
 wsi_paths: ./test_database/input/WSI/CMU-1-Small-Region.svs
 output_path: ./tests/tmp_results_folder/target_mpp_macenko
-wsi_extensions: svs
+wsi_extension: svs
 
 # basic setups
 target_mpp: 1.2

@@ -47,25 +47,40 @@ def get_files_from_dir(
     """
     if not isinstance(file_path, list):
         file_path = [file_path]
-    all_files = []
-    for curr_path in file_path:
-        # Could be that the path itself is a WSI
-        curr_path = Path(curr_path)
-        if curr_path.suffix[1:] == file_type and curr_path.is_file():
-            all_files += [curr_path]
-        else:
-            all_files += [
-                curr_file
-                for curr_file in curr_path.glob("*." + file_type)
-                if curr_file.is_file()
-            ]
-            # Could also be (class) folder in folder
-            if len(all_files) == 0:
+    if file_type == "dcm":
+        # dicom files: files of one WSI need to be stored inside a folder
+        all_files = []
+        for curr_path in file_path:
+            # check if path contains dcm files
+            subfiles = [f for f in curr_path.glob("*.dcm") if f.is_file()]
+            if len(subfiles) != 0:
+                all_files.append(curr_path)  # -> dicom folder needs to be loaded
+            # check if path contains subfolders with dicom files
+            subfolders = [f for f in curr_path.glob("*") if f.is_dir()]
+            for subfolder in subfolders:
+                subfiles = [f for f in subfolder.glob("*.dcm") if f.is_file()]
+                if len(subfiles) != 0:
+                    all_files.append(subfolder)
+    else:
+        all_files = []
+        for curr_path in file_path:
+            # Could be that the path itself is a WSI
+            curr_path = Path(curr_path)
+            if curr_path.suffix[1:] == file_type and curr_path.is_file():
+                all_files += [curr_path]
+            else:
                 all_files += [
                     curr_file
-                    for curr_file in curr_path.glob("**/*" + file_type)
+                    for curr_file in curr_path.glob("*." + file_type)
                     if curr_file.is_file()
                 ]
+                # Could also be (class) folder in folder
+                if len(all_files) == 0:
+                    all_files += [
+                        curr_file
+                        for curr_file in curr_path.glob("**/*" + file_type)
+                        if curr_file.is_file()
+                    ]
 
     return all_files
 
@@ -1080,23 +1095,3 @@ def polygon_to_patch_mask(
                 label_mask[:, :, label] = label_submask
 
     return label_mask
-
-
-# ignore kwargs for OpenSlide DeepZoomGenerator
-class DeepZoomGeneratorOS(DeepZoomGenerator):
-    def __init__(self, osr, tile_size=254, overlap=1, limit_bounds=False, **kwargs):
-        """Overwrite DeepZoomGenerator of OpenSlide
-
-            DeepZoomGenerator gets overwritten to provide matching API with CuCim
-            No Change in functionality
-
-        Args:
-            osr (OpenSlide): OpenSlide Image. Needed for OS compatibility and for retrieving metadata.
-            tile_size (int, optional): the width and height of a single tile.  For best viewer
-                          performance, tile_size + 2 * overlap should be a power
-                          of two.. Defaults to 254.
-            overlap (int, optional): the number of extra pixels to add to each interior edge
-                          of a tile. Defaults to 1.
-            limit_bounds (bool, optional): True to render only the non-empty slide region. Defaults to False.
-        """
-        super().__init__(osr, tile_size, overlap, limit_bounds)

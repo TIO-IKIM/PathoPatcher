@@ -1,7 +1,7 @@
 # dataset paths
 wsi_paths: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/test_database/input/WSI/CMU-1.svs
 output_path: ./tests/tmp_results_folder/annotations_tissue_mask
-wsi_extensions: svs
+wsi_extension: svs
 
 # annotations
 annotation_paths: /Users/fhoerst/Fabian-Projekte/Preprocessing/pathopatch/test_database/input/Annotations

@@ -1,7 +1,7 @@
 # dataset paths
 wsi_paths: /homes/fhoerst/histo-projects/DigitalHistologyHub/test_database/input/WSI
 output_path: /homes/fhoerst/histo-projects/DigitalHistologyHub/test_database/output/debug
-wsi_extensions: svs
+wsi_extension: svs
 
 # basic setups
 downsample: 0

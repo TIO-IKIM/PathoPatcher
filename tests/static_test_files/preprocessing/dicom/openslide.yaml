@@ -1,0 +1,20 @@
+# dataset paths
+wsi_paths: ./test_database/input/WSI/CMU-1.svs
+output_path: ./tests/tmp_results_folder/dicom/openslide_extraction
+wsi_extension: svs
+
+# basic setups
+target_mpp: 0.499
+patch_size: 256
+patch_overlap: 0
+normalize_stains: False
+min_intersection_ratio: 0.05
+
+processes: 8
+overwrite: True
+
+# other
+log_level: debug
+wsi_properties: {
+  magnification: 20,
+}

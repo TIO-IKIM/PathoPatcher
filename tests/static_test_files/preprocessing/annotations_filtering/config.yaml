@@ -1,7 +1,7 @@
 # dataset paths
 wsi_paths: ./test_database/input/WSI
 output_path: ./tests/tmp_results_folder/annotations_filtering
-wsi_extensions: svs
+wsi_extension: svs
 
 # annotations
 annotation_paths: ./test_database/input/Annotations

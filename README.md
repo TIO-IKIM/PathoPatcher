@@ -54,6 +54,8 @@ We provide different use cases - Offline-Dataset (Store on Disk :floppy_disk:) a
 
 In our Pre-Processing pipeline, we are able to extract quadratic patches from detected tissue areas, load annotation files (`.json`) and apply color normlizations. We make use of the popular [OpenSlide](https://openslide.org/) library, but extended it with the [RAPIDS cuCIM](https://github.com/rapidsai/cucim) framework for a speedup in patch-extraction.
 
+> We support all OpenSlide file formats + .dcm-File format (DICOM), by utilizing [`wsidicom`](https://github.com/imi-bigpicture/wsidicom) and [`wsidicomizer`](https://github.com/imi-bigpicture/wsidicomizer).
+
 **Explanations for use cases :floppy_disk: vs :zap:**
 <details>
   <summary>Offline-Dataset</summary>
@@ -369,10 +371,20 @@ In our Pre-Processing pipeline, we are able to extract quadratic patches from de
 An example notebook is given [here](PathoPatch.ipynb):
 <a href="https://colab.research.google.com/github/TIO-IKIM/PathoPatcher/blob/main/PathoPatch.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
-## Roadmap
-- :construction: In-memory inference loader - This feature is currently under development. Once completed, it will allow a dataset to be loaded into memory for inference, eliminating the need to store it on disk. Useful for inference
+### DICOM-conversion
+To convert WSI-Files into DICOM-Format, please follow [this documentation](docs/DICOM.md)
 
-- :soon: Dicom support - We plan to add another backend for handling DICOM files with a different structure
+### Filelist with metadata
+See here: [examples/filelist.csv](examples/filelist.csv)
+
+```csv
+path,slide_mpp,magnification
+./test_database/input/WSI/CMU-1.svs,0.500,20
+```
+Only the path is enforced, other two cols are optional.
+
+## Roadmap
+- :construction: In-memory inference loader - This feature is currently under development -  an unstable version is already online. Once completed, it will allow a dataset to be loaded into memory for inference, eliminating the need to store it on disk. Useful for inference
 
 - :soon: More test cases
 
@@ -406,6 +418,13 @@ An example notebook is given [here](PathoPatch.ipynb):
     pages="356--361",,
     isbn="978-3-658-44037-4"
 }
-
-
 ```
+
+### Acknowledgement
+For processing DICOM-files, this work relies on the IMI-Bigpicture [`wsidicom`](https://github.com/imi-bigpicture/wsidicom) and [`wsidicomizer`](https://github.com/imi-bigpicture/wsidicomizer) libraries, with the following acknowledgements:
+
+>wsidicom: Copyright 2021 Sectra AB, licensed under Apache 2.0.
+This project is part of a project that has received funding from the Innovative Medicines Initiative 2 Joint Undertaking under grant agreement No 945358. This Joint Undertaking receives support from the European Union’s Horizon 2020 research and innovation programme and EFPIA. IMI website: <www.imi.europa.eu>
+
+>wsidicomizer: Copyright 2021 Sectra AB, licensed under Apache 2.0.
+This project is part of a project that has received funding from the Innovative Medicines Initiative 2 Joint Undertaking under grant agreement No 945358. This Joint Undertaking receives support from the European Union’s Horizon 2020 research and innovation programme and EFPIA. IMI website: <www.imi.europa.eu>

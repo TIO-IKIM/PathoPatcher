@@ -18,7 +18,7 @@ WSI_EXT: List[str] = [
     "vms",
     "vmu",
     "dcm",
-]  # mirax not tested yet
+]
 ANNOTATION_EXT: List[str] = ["json"]
 LOGGING_EXT: List[str] = ["critical", "error", "warning", "info", "debug"]
 

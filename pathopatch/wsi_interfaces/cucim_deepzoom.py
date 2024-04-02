@@ -21,8 +21,8 @@ class DeepZoomGeneratorCucim(DeepZoomGenerator):
     use cucim to read regions.
 
     Args:
-        osr (OpenSlide): OpenSlide Image. Needed for OS compatibility and for retrieving metadata.
-        cucim_slide (CuImage): CuImage slide. Used for retrieving image data.
+        meta_loader (OpenSlide): OpenSlide Image. Needed for OS compatibility and for retrieving metadata.
+        image_loader (CuImage): CuImage slide. Used for retrieving image data.
         tile_size (int, optional): the width and height of a single tile.  For best viewer
                       performance, tile_size + 2 * overlap should be a power
                       of two.. Defaults to 254.
@@ -41,15 +41,15 @@ class DeepZoomGeneratorCucim(DeepZoomGenerator):
 
     def __init__(
         self,
-        osr: OpenSlide,
-        cucim_slide: CuImage,
+        meta_loader: OpenSlide,
+        image_loader: CuImage,
         tile_size: int = 254,
         overlap: int = 1,
         limit_bounds=False,
     ):
-        super().__init__(osr, tile_size, overlap, limit_bounds)
+        super().__init__(meta_loader, tile_size, overlap, limit_bounds)
 
-        self._cucim_slide = cucim_slide
+        self._cucim_slide = image_loader
         self.memory_capacity = preferred_memory_capacity(
             self._cucim_slide, patch_size=(tile_size, tile_size)
         )

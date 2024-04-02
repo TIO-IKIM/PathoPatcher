@@ -18,3 +18,5 @@ setuptools<=65.6.3
 tqdm
 torchvision
 torch
+wsidicom==0.20.4
+wsidicomizer==0.13.2
