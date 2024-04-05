@@ -478,7 +478,9 @@ class PreProcessor(object):
         model = mobilenet_v3_small().to(device=self.detector_device)
         model.classifier[-1] = nn.Linear(1024, 4)
         checkpoint = torch.load(
-            "./pathopatch/data/tissue_detector.pt",  # this causes errors
+            (
+                Path(os.path.dirname(__file__)).parent / "data" / "tissue_detector.pt"
+            ).resolve(),
             map_location=self.detector_device,
         )
         model.load_state_dict(checkpoint["model_state_dict"])

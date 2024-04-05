@@ -17,7 +17,14 @@ class DicomSlide(WsiDicom):
         self.level_count: int
         self.level_downsamples: List[float]
 
-        source = WsiDicomFileSource.open(dcm_folder)
+        # iterate through the folder to check if a DICOMDIR file exists
+        dcm_folder = Path(dcm_folder)
+        files = [f for f in dcm_folder.iterdir() if f.is_file()]
+        if not any(f.name == "DICOMDIR" for f in files):
+            source = WsiDicomFileSource.open(dcm_folder)
+        else:
+            source = WsiDicomFileSource.open_dicomdir(dcm_folder / "DICOMDIR")
+
         super().__init__(source, True)
 
         # information and properties to make this compatible with OpenSlide

@@ -1,3 +1,4 @@
 https://openslide.cs.cmu.edu/download/openslide-testdata/Aperio/CMU-1.svs
 https://openslide.cs.cmu.edu/download/openslide-testdata/Aperio/CMU-1-Small-Region.svs
 https://openslide.cs.cmu.edu/download/openslide-testdata/Aperio/JP2K-33003-1.svs
+https://drive.google.com/uc?export=download&id=15EjjYxtWf3_o_H4REckK1A0A8JGbpWC6

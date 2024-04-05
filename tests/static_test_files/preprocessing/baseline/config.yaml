@@ -10,3 +10,6 @@ processes: 8
 # other
 log_level: debug
 overwrite: True
+
+apply_prefilter: True
+filter_patches: True

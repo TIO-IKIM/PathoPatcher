@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = "1.0.1b"
+VERSION = "1.0.4b"
 DESCRIPTION = "PathoPatch - Accelerating Artificial Intelligence Based Whole Slide Image Analysis with an Optimized Preprocessing Pipeline"
 with open("docs/README_pypi.md", "r") as fh:
     LONG_DESCRIPTION = fh.read()
@@ -39,8 +39,8 @@ setup(
         "tqdm",
         "torchvision",
         "torch",
-        "wsidicom=0.20.4",
-        "wsidicomizer=0.13.2",
+        "wsidicom==0.20.4",
+        "wsidicomizer==0.13.2",
     ],
     scripts=[
         "pathopatch/wsi_extraction.py",
@@ -64,4 +64,6 @@ setup(
         "Operating System :: Microsoft :: Windows",
         "Operating System :: POSIX :: Other",
     ],
+    include_package_data=True,
+    package_data={"pathopatch": ["data/*"]},
 )

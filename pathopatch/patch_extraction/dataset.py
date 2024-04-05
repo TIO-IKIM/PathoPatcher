@@ -325,7 +325,7 @@ class LivePatchWSIDataset(Dataset):
         model = mobilenet_v3_small().to(device=self.detector_device)
         model.classifier[-1] = nn.Linear(1024, 4)
         checkpoint = torch.load(
-            "./pathopatch/data/tissue_detector.pt",  # this causes errors
+            "/pathopatch/data/tissue_detector.pt",  # this causes errors
             map_location=self.detector_device,
         )
         model.load_state_dict(checkpoint["model_state_dict"])
