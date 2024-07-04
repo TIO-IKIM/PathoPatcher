@@ -1,0 +1,32 @@
+name: pathopatch_env_2024
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python>=3.9.0,<3.12
+  - openslide=3.4.1
+  - pip>22.0
+  - pip:
+      - Pillow==9.5.0
+      - PyYAML==6.0
+      - Shapely==1.8.5.post1
+      - black==23.1.0
+      - colorama==0.4.6
+      - flake8-html==0.4.3
+      - flake8==6.0.0
+      - genbadge==1.1.0
+      - geojson>=3.0.0
+      - matplotlib==3.7.1
+      - natsort==8.4.0
+      - numpy>1.22,<1.24
+      - opencv_python_headless==4.5.4.58
+      - openslide_python==1.2.0
+      - pandas==1.5.3
+      - pre-commit==3.0.3
+      - pydantic==1.10.4
+      - pytest==7.4.4
+      - pytest-sugar==0.9.7
+      - rasterio==1.3.5.post1
+      - scikit-image==0.19.3
+      - torchvision==0.16.2
+      - tqdm==4.65.0

@@ -27,7 +27,7 @@ jobs:
         miniconda-version: "latest"
         channels: conda-forge, defaults
         python-version: 3.10.12
-        environment-file: environment.yaml
+        environment-file: environment_build.yaml
         activate-environment: pathopatch_env
         use-only-tar-bz2: true  # IMPORTANT: This needs to be set for caching to work properly!
         auto-update-conda: true
