@@ -12,4 +12,4 @@ log_level: debug
 overwrite: True
 
 apply_prefilter: True
-filter_patches: True
+filter_patches: False

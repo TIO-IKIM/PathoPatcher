@@ -6,6 +6,8 @@
 # University Medicine Essen
 
 import math
+import tempfile
+
 import os
 import warnings
 from typing import List, Tuple
@@ -54,47 +56,51 @@ def generate_polygon_overview(
     region_label_set = set(region_labels)
 
     # save white basic image
-    white_bg = Image.fromarray(255 * np.ones(shape=reference_size, dtype=np.uint8))
-    white_bg.save("tmp.tif")
+    with tempfile.NamedTemporaryFile(suffix=".tif", delete=False) as tmp_file:
+        tmp_file_path = tmp_file.name
+    try:
+        white_bg = Image.fromarray(255 * np.ones(shape=reference_size, dtype=np.uint8))
+        white_bg.save(tmp_file_path)
 
-    if image is None:
-        src = 255 * np.ones(shape=reference_size, dtype=np.uint8)
-        image = Image.fromarray(src)
-    # draw individual images
-    for label in region_label_set:
-        label_image = image.copy()
-        white_image = white_bg.copy()
-        if tissue_grid is not None:
-            label_tissue_grid = tissue_grid.copy()
-        else:
-            label_tissue_grid = None
-        label_polygon = get_filtered_polygons(
-            polygons, region_labels, label, downsample
-        )
-        with warnings.catch_warnings():
-            warnings.filterwarnings("ignore")
-            with rasterio.open("tmp.tif") as src:
-                out_image, out_transform = rasterio_mask(src, label_polygon, crop=False)
-                # check polygon draw
-                label_polygon_list = []
-                for poly in label_polygon:
-                    if poly.type == "MultiPolygon":
-                        labels = [x for x in poly.geoms]
-                        label_polygon_list = label_polygon_list + labels
-                    else:
-                        label_polygon_list = label_polygon_list + [poly]
-                poly_outline_image = label_image.copy()
-                poly_outline_image_draw = ImageDraw.Draw(poly_outline_image)
-                [
-                    poly_outline_image_draw.polygon(
-                        list(lp.exterior.coords),
-                        outline=COLOR_DEFINITIONS[label_map[label]],
-                        width=5,
+        if image is None:
+            src = 255 * np.ones(shape=reference_size, dtype=np.uint8)
+            image = Image.fromarray(src)
+        # draw individual images
+        for label in region_label_set:
+            label_image = image.copy()
+            white_image = white_bg.copy()
+            if tissue_grid is not None:
+                label_tissue_grid = tissue_grid.copy()
+            else:
+                label_tissue_grid = None
+            label_polygon = get_filtered_polygons(
+                polygons, region_labels, label, downsample
+            )
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore")
+                with rasterio.open(tmp_file_path) as src:
+                    out_image, out_transform = rasterio_mask(
+                        src, label_polygon, crop=False
                     )
-                    for lp in label_polygon_list
-                ]
-                # [poly_outline_image_draw.polygon(list(lp.interiors), outline=COLOR_DEFINITIONS[label_map[label]] , width=5) for lp in label_polygon_list if len(list(lp.interiors)) > 2]
-                # TODO: interiors are wrong, needs to be fixed (check file ID_1004_LOC_4_TIME_2_BUYUE2088_STATUS_0_UID_27 for an example with interiors)
+                    # check polygon draw
+                    label_polygon_list = []
+                    for poly in label_polygon:
+                        if poly.type == "MultiPolygon":
+                            labels = [x for x in poly.geoms]
+                            label_polygon_list = label_polygon_list + labels
+                        else:
+                            label_polygon_list = label_polygon_list + [poly]
+                    poly_outline_image = label_image.copy()
+                    poly_outline_image_draw = ImageDraw.Draw(poly_outline_image)
+                    [
+                        poly_outline_image_draw.polygon(
+                            list(lp.exterior.coords),
+                            outline=COLOR_DEFINITIONS[label_map[label]],
+                            width=5,
+                        )
+                        for lp in label_polygon_list
+                    ]
+                    # [poly_outline_image_draw.polygon(list(lp.interiors), outline=COLOR_DEFINITIONS[label_map[label]] , width=5) for lp in label_polygon_list if len(list(lp.interiors)) > 2]
 
                 mask = out_image.transpose(1, 2, 0)
                 mask = (mask / 255).astype(np.uint8)
@@ -119,8 +125,8 @@ def generate_polygon_overview(
                 image_container[f"{label}_clean"] = white_image
                 image_container[f"{label}_ouline"] = poly_outline_image
                 areas[area] = label
-
-    os.remove("tmp.tif")
+    finally:
+        os.remove(tmp_file_path)
 
     # draw all masks on one image, sorted by areas
     sorted_labels = [areas[k] for k in sorted(areas, reverse=True)]

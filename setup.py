@@ -40,7 +40,7 @@ setup(
         "torchvision",
         "torch",
         "wsidicom==0.20.4",
-        "wsidicomizer==0.13.2",
+        "wsidicomizer==0.14.1",
     ],
     scripts=[
         "pathopatch/wsi_extraction.py",

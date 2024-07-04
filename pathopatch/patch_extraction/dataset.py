@@ -367,13 +367,13 @@ class LivePatchWSIDataset(Dataset):
         self.slide_openslide = OpenSlide(str(self.config.wsi_path))
         self.slide = self.image_loader(str(self.config.wsi_path))
 
-        if "openslide.mpp-x" in self.slide_openslide.properties:
-            slide_mpp = float(self.slide_openslide.properties["openslide.mpp-x"])
-        elif (
+        if (
             self.config.wsi_properties is not None
             and "slide_mpp" in self.config.wsi_properties
         ):
             slide_mpp = self.config.wsi_properties["slide_mpp"]
+        elif "openslide.mpp-x" in self.slide_openslide.properties:
+            slide_mpp = float(self.slide_openslide.properties["openslide.mpp-x"])
         else:  # last option is to use regex
             try:
                 pattern = re.compile(r"MPP(?: =)? (\d+\.\d+)")
@@ -396,15 +396,15 @@ class LivePatchWSIDataset(Dataset):
                     "MPP must be defined either by metadata or by config file!"
                 )
 
-        if "openslide.objective-power" in self.slide_openslide.properties:
-            slide_mag = float(
-                self.slide_openslide.properties.get("openslide.objective-power")
-            )
-        elif (
+        if (
             self.config.wsi_properties is not None
             and "magnification" in self.config.wsi_properties
         ):
             slide_mag = self.config.wsi_properties["magnification"]
+        elif "openslide.objective-power" in self.slide_openslide.properties:
+            slide_mag = float(
+                self.slide_openslide.properties.get("openslide.objective-power")
+            )
         else:
             raise NotImplementedError(
                 "MPP must be defined either by metadata or by config file!"

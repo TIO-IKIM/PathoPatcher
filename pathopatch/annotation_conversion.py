@@ -57,6 +57,7 @@ def merge_outlines(geojson_string: str) -> str:
             return modified_geojson_str
 
         elif element["type"] == "Feature":
+            print("Deteceted single feature, not a FeatureCollection")
             raise NotImplementedError
 
 

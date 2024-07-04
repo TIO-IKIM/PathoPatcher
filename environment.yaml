@@ -1,36 +1,35 @@
-name: pathopatch_env_2
+name: pathopatch_env_2024
 channels:
-  - conda-forge
+  - bioconda
   - defaults
+  - conda-forge
+  - pytorch
+  - nvidia
 dependencies:
-  - python=3.10.12
-  - openslide=3.4.1
-  - pip=23.0
-  - python-javabridge
-  - libjpeg-turbo
+  - python>=3.9.0,<3.12
+  - conda-forge::openslide=4.0.0=h75f8748_1
+  - pip>22.0
   - pip:
-    - Pillow>=9.5.0
-    - PyYAML
-    - Shapely==1.8.5.post1
-    - black
-    - colorama
-    - flake8-html
-    - flake8
-    - genbadge
-    - geojson>=3.0.0
-    - matplotlib
-    - natsort
-    - numpy>1.22,<1.24
-    - opencv_python_headless==4.5.4.58
-    - openslide_python>=1.3.1
-    - pandas
-    - pre-commit
-    - pydantic==1.10.4
-    - pytest==7.4.4
-    - pytest-sugar==0.9.7
-    - rasterio==1.3.5.post1
-    - scikit-image
-    - torchvision
-    - tqdm
-    - wsidicomizer==0.13.2
-    - wsidicom==0.20.4
+      - openslide-python==1.3.1
+      - wsidicomizer==0.14.1
+      - wsidicom==0.20.4
+      - Pillow>=9.5.0
+      - PyYAML
+      - Shapely==1.8.5.post1
+      - colorama
+      - future
+      - geojson>=3.0.0
+      - matplotlib
+      - natsort
+      - numpy>1.22,<1.24
+      - opencv_python_headless # maybe try with contrib
+      - pandas
+      - pydantic==1.10.4
+      - rasterio==1.3.5.post1
+      - requests
+      - scikit-image
+      - setuptools<=65.6.3
+      - tqdm
+      - torchvision
+      - torch
+      - pytest

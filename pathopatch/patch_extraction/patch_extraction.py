@@ -815,13 +815,13 @@ class PreProcessor(object):
             if "magnification" in slide_properties:
                 slide_mag = slide_properties["magnification"]
         if slide_mpp is None:
-            if "openslide.mpp-x" in slide.properties:
-                slide_mpp = float(slide.properties.get("openslide.mpp-x"))
-            elif (
+            if (
                 self.config.wsi_properties is not None
                 and "slide_mpp" in self.config.wsi_properties
             ):
                 slide_mpp = self.config.wsi_properties["slide_mpp"]
+            elif "openslide.mpp-x" in slide.properties:
+                slide_mpp = float(slide.properties.get("openslide.mpp-x"))
             else:  # last option is to use regex
                 try:
                     pattern = re.compile(r"MPP(?: =)? (\d+\.\d+)")
@@ -842,13 +842,13 @@ class PreProcessor(object):
                         "MPP must be defined either by metadata or by config file!"
                     )
         if slide_mag is None:
-            if "openslide.objective-power" in slide.properties:
-                slide_mag = float(slide.properties.get("openslide.objective-power"))
-            elif (
+            if (
                 self.config.wsi_properties is not None
                 and "magnification" in self.config.wsi_properties
             ):
                 slide_mag = self.config.wsi_properties["magnification"]
+            elif "openslide.objective-power" in slide.properties:
+                slide_mag = float(slide.properties.get("openslide.objective-power"))
             else:
                 raise NotImplementedError(
                     "Magnification must be defined either by metadata or by config file!"

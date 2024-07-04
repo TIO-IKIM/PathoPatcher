@@ -1,7 +1,5 @@
 import json
-import os
 
-import shutil
 import unittest
 from pathlib import Path
 
@@ -13,7 +11,6 @@ from PIL import Image
 from pathopatch.cli import PreProcessingConfig, PreProcessingYamlConfig
 from pathopatch.patch_extraction.patch_extraction import PreProcessor
 from pathopatch.utils.logger import Logger
-from pathopatch.utils.tools import close_logger
 from test_database.download import check_test_database
 
 
@@ -52,24 +49,24 @@ class TestPreProcessorBaseline(unittest.TestCase):
         )
         cls.slide_processor.sample_patches_dataset()
 
-    @classmethod
-    def tearDownClass(cls):
-        """Clean output directory"""
-        # close logger
-        close_logger(cls.logger)
+    # @classmethod
+    # def tearDownClass(cls):
+    #     """Clean output directory"""
+    #     # close logger
+    #     close_logger(cls.logger)
 
-        # clean output directory
-        clean_folders = [
-            f for f in Path(cls.opt_dict["output_path"]).iterdir() if f.is_dir()
-        ]
-        for f in clean_folders:
-            shutil.rmtree(f.resolve())
-        clean_files = [
-            f for f in Path(cls.opt_dict["output_path"]).iterdir() if f.is_file()
-        ]
-        for f in clean_files:
-            os.remove(f.resolve())
-        shutil.rmtree(f.parent.resolve())
+    #     # clean output directory
+    #     clean_folders = [
+    #         f for f in Path(cls.opt_dict["output_path"]).iterdir() if f.is_dir()
+    #     ]
+    #     for f in clean_folders:
+    #         shutil.rmtree(f.resolve())
+    #     clean_files = [
+    #         f for f in Path(cls.opt_dict["output_path"]).iterdir() if f.is_file()
+    #     ]
+    #     for f in clean_files:
+    #         os.remove(f.resolve())
+    #     shutil.rmtree(f.parent.resolve())
 
     def test_init_files(self) -> None:
         """For this case 1 WSI files should have been loaded"""

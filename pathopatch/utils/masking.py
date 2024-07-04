@@ -119,14 +119,18 @@ def convert_polygons_to_mask(
     ]
     src = 255 * np.ones(shape=reference_size, dtype=np.uint8)
     im = Image.fromarray(src)
-    im.save("tmp.tif")
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore")
-        with rasterio.open("tmp.tif") as src:
-            out_image, _ = rasterio_mask(src, polygons_downsampled, crop=False)
-            mask = out_image.transpose(1, 2, 0)
-            mask = np.invert(mask)
-    os.remove("tmp.tif")
+    with tempfile.NamedTemporaryFile(suffix=".tif", delete=False) as tmp_file:
+        tmp_file_path = tmp_file.name
+    try:
+        im.save(tmp_file_path)
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore")
+            with rasterio.open(tmp_file_path) as src:
+                out_image, _ = rasterio_mask(src, polygons_downsampled, crop=False)
+                mask = out_image.transpose(1, 2, 0)
+                mask = np.invert(mask)
+    finally:
+        os.remove(tmp_file_path)
     mask = (mask / 255).astype(np.uint8)
 
     assert len(np.unique(mask)) <= 2, "Mask is not binary"

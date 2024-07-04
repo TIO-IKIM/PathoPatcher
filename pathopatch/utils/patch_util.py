@@ -383,7 +383,7 @@ def compute_interesting_patches(
             apply_prefilter=apply_prefilter,
         )
     else:
-        logger.info("Using tissue geometry for background seperation")
+        logger.info("Using tissue geometry for background separation")
         if mask_otsu is True:
             logger.warning(
                 "Mask-Otsu is set to true, but tissue annotation has precedence"

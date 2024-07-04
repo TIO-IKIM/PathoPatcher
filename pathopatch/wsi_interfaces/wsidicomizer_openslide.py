@@ -19,24 +19,27 @@ class DicomSlide(WsiDicom):
 
         # iterate through the folder to check if a DICOMDIR file exists
         dcm_folder = Path(dcm_folder)
-        files = [f for f in dcm_folder.iterdir() if f.is_file()]
-        if not any(f.name == "DICOMDIR" for f in files):
-            source = WsiDicomFileSource.open(dcm_folder)
-        else:
-            source = WsiDicomFileSource.open_dicomdir(dcm_folder / "DICOMDIR")
+        files = [f for f in dcm_folder.iterdir() if f.is_file() and f.suffix == ".dcm"]
+        source = WsiDicomFileSource.open(files)
 
         super().__init__(source, True)
 
         # information and properties to make this compatible with OpenSlide
-        self.dimensions = (self.size.width, self.size.height)
-        self.level_count = len(self.levels)
+        x_max = 0
+        y_max = 0
+        for p in self.pyramids:
+            x_max = max(x_max, p.size.width)
+            y_max = max(y_max, p.size.height)
+        self.dimensions = (x_max, y_max)
+        self.level_count = len(self.pyramids)
         self.level_dimensions = self._get_level_dimensions()
         self.level_downsamples = self._get_level_downsamples(self.level_dimensions)
 
+        # TODO: get it from pyramid
         self.properties = {
-            "mpp": self.mpp,
-            "openslide.mpp-x": self.mpp.width,
-            "openslide.mpp-y": self.mpp.height,
+            "mpp": self.pyramids[-1].mpp,
+            "openslide.mpp-x": self.pyramids[-1].mpp.width,
+            "openslide.mpp-y": self.pyramids[-1].mpp.height,
             "openslide.level-count": self.level_count,
             "level_count": self.level_count,
             "level_dimensions": self.level_dimensions,
@@ -62,7 +65,7 @@ class DicomSlide(WsiDicom):
             Tuple[Tuple[int, int]]: The dimensions of all levels.
                 Each tuple contains the width and height of the level.
         """
-        return tuple((level.size.width, level.size.height) for level in self.levels)
+        return tuple((level.size.width, level.size.height) for level in self.pyramids)
 
     def _get_level_downsamples(
         self, level_dimensions: Tuple[Tuple[int, int]]
@@ -76,7 +79,7 @@ class DicomSlide(WsiDicom):
         Returns:
             List[float]: The downsample factor for each level.
         """
-        highest_x = level_dimensions[0][0]
+        highest_x = level_dimensions[-1][0]
         return tuple(highest_x / dim[0] for dim in level_dimensions)
 
     def _convert_region_openslide(

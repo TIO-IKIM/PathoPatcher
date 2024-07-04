@@ -1,0 +1,19 @@
+# dataset paths
+wsi_paths: ./test_database/3DHistech/Converted
+output_path: ./tests/tmp_results_folder/dicom/dicom_histech
+wsi_extension: dcm
+
+# basic setups
+target_mpp: 1
+patch_size: 512
+patch_overlap: 0
+normalize_stains: False
+min_intersection_ratio: 0.05
+
+processes: 8
+overwrite: True
+
+# other
+log_level: debug
+wsi_magnification: 40
+wsi_mpp: 0.25
