@@ -30,3 +30,4 @@ dependencies:
       - scikit-image==0.19.3
       - torchvision==0.16.2
       - tqdm==4.65.0
+      - wsidicomizer
