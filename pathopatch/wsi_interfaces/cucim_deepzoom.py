@@ -75,7 +75,11 @@ class DeepZoomGeneratorCucim(DeepZoomGenerator):
             level=args[1],
             size=args[2],
         )
-        tile = Image.fromarray(np.array(tile), mode="RGB")  # CuImage is RGB
+        tile = np.array(tile)
+        if tile.shape[2] == 4:
+            tile = Image.fromarray(tile, mode="RGBA").convert("RGB")
+        else:
+            tile = Image.fromarray(tile, mode="RGB")
 
         # Scale to the correct size
         if tile.size != z_size:
