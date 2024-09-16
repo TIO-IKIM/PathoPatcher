@@ -513,7 +513,7 @@ class LivePatchWSIDataset(Dataset):
                 _,
                 _,
             ) = compute_interesting_patches(
-                slide=self.slide,
+                slide=self.slide_openslide,
                 tiles=self.tile_extractor,
                 target_level=level if level is not None else 1,
                 target_patch_size=self.res_tile_size,
