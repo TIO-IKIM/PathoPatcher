@@ -24,6 +24,9 @@ ___
 
 ## Installation
 
+> [!CAUTION]
+> Please use a Python Version smaller than 3.12, we recommend 3.10
+
 ### Prerequisite
 1. Openslide (>= 3.4.1) needs to be installed (either directly https://openslide.org/download/ or via conda)<details>
         <summary>OpenSlide conda</summary>
