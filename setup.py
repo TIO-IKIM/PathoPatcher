@@ -41,6 +41,7 @@ setup(
         "torch",
         "wsidicom==0.20.4",
         "wsidicomizer==0.14.1",
+        "pydicom==2.4.4",
     ],
     scripts=[
         "pathopatch/wsi_extraction.py",
