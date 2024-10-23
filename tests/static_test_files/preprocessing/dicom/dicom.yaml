@@ -18,3 +18,4 @@ log_level: debug
 wsi_properties: {
   magnification: 20.0,
 }
+hardware_selection: wsidicom
