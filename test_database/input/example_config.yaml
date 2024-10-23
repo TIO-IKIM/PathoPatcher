@@ -1,0 +1,6 @@
+wsi_paths: ./test_database/input/WSI/JP2K-33003-1.svs
+output_path: ./test_output
+patch_size: 512
+target_mag: 10
+processes: 2
+overwrite: True

@@ -184,14 +184,14 @@ def target_mpp_to_downsample(
             rescaling_factor = 1.0
         else:
             logger.warning(
-                f"Requested mpp resolution ({target_mpp}) is not a power of the base resultion {base_mpp}. "
+                f"Requested mpp resolution ({target_mpp}) is not a power of the base resolution {base_mpp}. "
                 "We perform rescaling, but this may not be accurate and is very slow!"
             )
             downsample = int(np.floor(target_mpp / base_mpp))
             rescaling_factor = target_mpp / (base_mpp * downsample)
     else:
         logger.warning(
-            f"Requested mpp resolution ({target_mpp}) is not a power of the base resultion {base_mpp}. "
+            f"Requested mpp resolution ({target_mpp}) is not a power of the base resolution {base_mpp}. "
             "We perform rescaling, but this may not be accurate and is very slow!"
         )
         downsample = 1

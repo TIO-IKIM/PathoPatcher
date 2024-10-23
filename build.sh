@@ -8,8 +8,7 @@ else
     exit 1
 fi
 
-python setup.py sdist
-python setup.py bdist_wheel
+python -m build
 
 echo -e "\nTo upload to PyPI, run the following command:\n"
 echo -e "\ttwine upload dist/*\n"
