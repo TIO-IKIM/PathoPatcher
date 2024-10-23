@@ -118,7 +118,7 @@ In our Pre-Processing pipeline, we are able to extract quadratic patches from de
       [--apply_prefilter APPLY_PREFILTER]
       [--log_path LOG_PATH]
       [--log_level {critical,error,warning,info,debug}]
-      [--hardware_selection {cucim,openslide}]
+      [--hardware_selection {cucim,openslide,wsidicom}]
       [--wsi_magnification WSI_MAGNIFICATION]
       [--wsi_mpp WSI_MPP]
 
@@ -256,9 +256,9 @@ In our Pre-Processing pipeline, we are able to extract quadratic patches from de
     --log_level {critical,error,warning,info,debug}
                           Set the logging level. Options are ['critical', 'error',
                           'warning', 'info', 'debug'] (default: None)
-    --hardware_selection {cucim,openslide}
+    --hardware_selection {cucim,openslide,wsidicom}
                           Select hardware device (just if available, otherwise always
-                          cucim). Defaults to cucim. (default: None)
+                          cucim). Defaults to None. (default: None)
     --wsi_magnification WSI_MAGNIFICATION
                           Manual WSI magnification, but just applies if metadata
                           cannot be derived from OpenSlide (e.g., for .tiff files).
@@ -369,6 +369,11 @@ In our Pre-Processing pipeline, we are able to extract quadratic patches from de
   └── thumbnail.png         # WSI thumbnail
   ```
 </details>
+
+## A Note on DICOM
+If you use DICOM files directly converted by vendors, first try to use OpenSlide which is the default setting. If this is slow, you could try to enforce the `wsidicom` image loader by setting the hardware to "wsidicom" (`hardware_selection: wsi_dicom`or `--hardware_selection wsidicom`) and check if this works.
+
+If you converted files to DICOM with the `wsidicomizer` tool as explained below, please always set the image loader to "wsidicom" (`hardware_selection: wsi_dicom`or `--hardware_selection wsidicom`).
 
 ## Examples
 An example notebook is given [here](PathoPatch.ipynb):

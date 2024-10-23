@@ -29,7 +29,7 @@ test_database/3DHistech
 test_database/XiaLab
 test_database/dicom_files
 test_database/dicom_leica
-dpyproject.toml
+test_database/dicom_leica_anonymized
+test_database/dicom_wsidicomizer
 mask_ihc.ipynb
-pyproject.toml
 test_output

@@ -80,4 +80,4 @@ filter_patches:               # Post-extraction patch filtering to sort out arte
 # logging
 log_path:                     # Path where log files should be stored. Otherwise, log files are stored in the output folder. [str][Optional, defaults to None]
 log_level:                    # Set the logging level. [str][Optional, defaults to info]
-hardware_selection:           # Select hardware device (just if available, otherwise always cucim). [str] [Optional, defaults to cucim]
+hardware_selection:           # Select hardware device (just if available, otherwise always cucim). Options are openslide,cucim,wsidicom [str] [Optional, defaults to cucim]

@@ -92,7 +92,7 @@ wsi_extraction [-h]
     [--apply_prefilter APPLY_PREFILTER]
     [--log_path LOG_PATH]
     [--log_level {critical,error,warning,info,debug}]
-    [--hardware_selection {cucim,openslide}]
+    [--hardware_selection {cucim,openslide,wsidicom}]
     [--wsi_magnification WSI_MAGNIFICATION]
     [--wsi_mpp WSI_MPP]
 
@@ -230,9 +230,9 @@ options:
   --log_level {critical,error,warning,info,debug}
                         Set the logging level. Options are ['critical', 'error',
                         'warning', 'info', 'debug'] (default: None)
-  --hardware_selection {cucim,openslide}
-                        Select hardware device (just if available, otherwise always
-                        cucim). Defaults to cucim. (default: None)
+    --hardware_selection {cucim,openslide,wsidicom}
+                          Select hardware device (just if available, otherwise always
+                          cucim). Defaults to None. (default: None)
   --wsi_magnification WSI_MAGNIFICATION
                         Manual WSI magnification, but just applies if metadata
                         cannot be derived from OpenSlide (e.g., for .tiff files).
@@ -306,6 +306,8 @@ WSI_Name
 ├── patch_metadata.json   # Patch metadata of WSI merged in one file
 └── thumbnail.png         # WSI thumbnail
 ```
+
+## Further information
 For more information, check out the git.
 
 ## License

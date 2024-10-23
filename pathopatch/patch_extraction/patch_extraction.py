@@ -57,6 +57,7 @@ from pathopatch.wsi_interfaces.wsidicomizer_openslide import (
     DicomSlide,
     DeepZoomGeneratorDicom,
 )
+from openslide import OpenSlideUnsupportedFormatError
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -194,13 +195,13 @@ class PreProcessor(object):
         num_files (int): Number of WSI files
         rescaling_factor (int): Rescaling factor for the WSI
         deepzoomgenerator (Union[DeepZoomGeneratorOS, DeepZoomGeneratorCucim]): DeepZoomGenerator object
-        image_loader (Union[OpenSlide, CuImage]): Image loader object
+        image_loader (Union[OpenSlide, CuImage, DicomSlide]): Image loader object
+        image_metadata_loader (Union[OpenSlide, DicomSlide]): Image metadata loader object
         detector_device (str): Device for tissue detection
         detector_model (nn.Module): Tissue detection model
         detector_transforms (Compose): Tissue detection transforms
         curr_wsi_level (int): Current WSI level
         save_context (bool): Save context flag
-        # TODO: improve and check with new dcm coce and new filelist loading
 
     Methods:
         setup_output_path(output_path: Union[str, Path]) -> None:
@@ -291,9 +292,6 @@ class PreProcessor(object):
             self.config.annotation_extension,
             self.config.incomplete_annotations,
         )
-
-        # hardware
-        self._set_hardware(self.config.hardware_selection)
 
         # convert overlap from percentage to pixels
         self.config.patch_overlap = int(
@@ -414,7 +412,9 @@ class PreProcessor(object):
                         "files to have the same name as the WSI files. Otherwise use incomplete_annotations=True"
                     )
 
-    def _set_hardware(self, hardware_selection: str = "cucim") -> None:
+    def _set_hardware(
+        self, wsi_file: Union[Path, str], hardware_selection: str = None
+    ) -> None:
         """Either load CuCIM (GPU-accelerated) or OpenSlide
 
 
@@ -422,28 +422,106 @@ class PreProcessor(object):
             hardware_selection (str, optional): Specify hardware. Just for experiments. Must be either "openslide", or "cucim".
                 Defaults to cucim.
         """
-        if self.config.wsi_extension == "dcm":
-            logger.info("Using WsiDicom as WSIReader")
-            self.deepzoomgenerator = DeepZoomGeneratorDicom
-            self.image_loader = DicomSlide
-        else:
-            if (
-                module_exists("cucim", error="ignore")
-                and hardware_selection.lower() == "cucim"
-            ):
-                logger.info("Using CuCIM as WSIReader")
-                from cucim import CuImage
+        wsi_file = Path(wsi_file)
+        wsi_file_global = Path(wsi_file)
 
-                from pathopatch.wsi_interfaces.cucim_deepzoom import (
-                    DeepZoomGeneratorCucim,
-                )
+        # Force the use of the hardware selection
+        if hardware_selection is not None:
+            if self.config.wsi_extension == "dcm":
+                if hardware_selection.lower() not in ["openslide", "wsidicom"]:
+                    raise NotImplementedError("Option not available for DCM files.")
+                else:
+                    if hardware_selection.lower() == "openslide":
+                        logger.info("Using OpenSlide as WSIReader")
+                        self.deepzoomgenerator = DeepZoomGeneratorOS
+                        self.image_loader = OpenSlide
+                        dcm_files = list(wsi_file.glob("*.dcm"))
+                        dcm_files = [
+                            (f, os.path.getsize(f.resolve())) for f in dcm_files
+                        ]
+                        dcm_files = sorted(dcm_files, key=lambda x: x[1], reverse=True)
+                        wsi_file = dcm_files[0][0]
+                        try:
+                            OpenSlide(str(wsi_file))
+                            self.image_loader = OpenSlide
+                            self.deepzoomgenerator = DeepZoomGeneratorOS
+                            self.slide_metadata_loader = OpenSlide
+                        except OpenSlideUnsupportedFormatError as e:
+                            raise e
+                        except Exception as e:
+                            raise e
 
-                self.deepzoomgenerator = DeepZoomGeneratorCucim
-                self.image_loader = CuImage
+                    elif hardware_selection.lower() == "wsidicom":
+                        logger.info("Using WsiDicom as WSIReader")
+                        try:
+                            DicomSlide(wsi_file)
+                        except Exception as e:
+                            raise e
+                        self.deepzoomgenerator = DeepZoomGeneratorDicom
+                        self.image_loader = DicomSlide
+                        self.slide_metadata_loader = DicomSlide
             else:
-                logger.info("Using OpenSlide as WSIReader")
-                self.deepzoomgenerator = DeepZoomGeneratorOS
-                self.image_loader = OpenSlide
+                if hardware_selection.lower() not in ["openslide", "cucim"]:
+                    raise NotImplementedError("Option not available")
+                if (
+                    module_exists("cucim", error="ignore")
+                    and hardware_selection.lower() == "cucim"
+                ):
+                    logger.info("Using CuCIM as WSIReader")
+                    from cucim import CuImage
+
+                    from pathopatch.wsi_interfaces.cucim_deepzoom import (
+                        DeepZoomGeneratorCucim,
+                    )
+
+                    self.deepzoomgenerator = DeepZoomGeneratorCucim
+                    self.image_loader = CuImage
+                    self.slide_metadata_loader = OpenSlide
+                elif hardware_selection.lower() == "openslide":
+                    logger.info("Using OpenSlide as WSIReader")
+                    self.deepzoomgenerator = DeepZoomGeneratorOS
+                    self.image_loader = OpenSlide
+                    self.slide_metadata_loader = OpenSlide
+        else:
+            if self.config.wsi_extension == "dcm":
+                try:
+                    dcm_files = list(wsi_file.glob("*.dcm"))
+                    dcm_files = [(f, os.path.getsize(f.resolve())) for f in dcm_files]
+                    dcm_files = sorted(dcm_files, key=lambda x: x[1], reverse=True)
+                    OpenSlide(str(dcm_files[0][0]))
+                    wsi_file = dcm_files[0][0]
+                    self.image_loader = OpenSlide
+                    self.deepzoomgenerator = DeepZoomGeneratorOS
+                    self.slide_metadata_loader = OpenSlide
+                    logger.info("Using OpenSlide as WSIReader")
+                except:
+                    try:
+                        DicomSlide(wsi_file)
+                    except Exception as e:
+                        raise e
+                    self.deepzoomgenerator = DeepZoomGeneratorDicom
+                    self.image_loader = DicomSlide
+                    self.slide_metadata_loader = DicomSlide
+                    logger.info("Using WsiDicom as WSIReader")
+            else:
+                if module_exists("cucim", error="ignore"):
+                    logger.info("Using CuCIM as WSIReader")
+                    from cucim import CuImage
+
+                    from pathopatch.wsi_interfaces.cucim_deepzoom import (
+                        DeepZoomGeneratorCucim,
+                    )
+
+                    self.deepzoomgenerator = DeepZoomGeneratorCucim
+                    self.image_loader = CuImage
+                    self.slide_metadata_loader = OpenSlide
+                else:
+                    logger.info("Using OpenSlide as WSIReader")
+                    self.deepzoomgenerator = DeepZoomGeneratorOS
+                    self.image_loader = OpenSlide
+                    self.slide_metadata_loader = OpenSlide
+
+        return wsi_file_global, wsi_file
 
     def _set_tissue_detector(self) -> None:
         """Set up the tissue detection model and transformations.
@@ -532,7 +610,8 @@ class PreProcessor(object):
             try:
                 # prepare wsi, espeically find patches
                 (
-                    (n_cols, n_rows),
+                    (wsi_file_global, wsi_file),
+                    (_, _),
                     (wsi_metadata, mask_images, mask_images_annotations, thumbnails),
                     (
                         interesting_coords_wsi,
@@ -544,7 +623,7 @@ class PreProcessor(object):
 
                 # setup storage
                 store = Storage(
-                    wsi_name=wsi_file.stem,
+                    wsi_name=wsi_file_global.stem,
                     output_path=self.config.output_path,
                     metadata=wsi_metadata,
                     mask_images=mask_images,
@@ -563,6 +642,7 @@ class PreProcessor(object):
                 ) = self.process_queue(
                     batch=interesting_coords_wsi,
                     wsi_file=wsi_file,
+                    wsi_file_global=wsi_file_global,
                     wsi_metadata=wsi_metadata,
                     level=level_wsi,
                     polygons=polygons_downsampled_wsi,
@@ -571,7 +651,7 @@ class PreProcessor(object):
                 )
 
                 if patch_count == 0:
-                    logger.warning(f"No patches sampled from {wsi_file.name}")
+                    logger.warning(f"No patches sampled from {wsi_file_global.name}")
                 logger.info(f"Total patches sampled: {patch_count}")
                 store.clean_up(patch_distribution, patch_result_metadata)
 
@@ -625,12 +705,12 @@ class PreProcessor(object):
                 # for segmentation algorithms with neighbourhood (e.g., valuing vicinity)
                 if self.config.save_context_without_mask:
                     self._get_surrounding_patches(
-                        wsi_file=wsi_file,
+                        wsi_file=wsi_file_global,
                         roi_patches=patch_result_metadata,
                         store=store,
-                    )
+                    )  # TODO: add wsi_file for dcm
             except NotImplementedError as e:
-                logger.error(f"Cannot preprocess file {wsi_file.name}: {e}")
+                logger.error(f"Cannot preprocess file {wsi_file_global.name}: {e}")
                 continue
 
         logger.info(f"Patches saved to: {self.config.output_path.resolve()}")
@@ -763,7 +843,11 @@ class PreProcessor(object):
     def _prepare_wsi(
         self, wsi_file: str
     ) -> Tuple[
-        Tuple[int, int], Tuple[dict, dict, dict, dict], Callable, List[List[Tuple]]
+        Tuple[str, str],
+        Tuple[int, int],
+        Tuple[dict, dict, dict, dict],
+        Callable,
+        List[List[Tuple]],
     ]:
         """Prepare a WSI for preprocessing
 
@@ -781,8 +865,8 @@ class PreProcessor(object):
             WrongParameterException: The level resulting from target magnification or downsampling factor must exists to extract patches.
 
         Returns:
-            Tuple[Tuple[int, int], Tuple[dict, dict, dict, dict], Callable, List[List[Tuple]]]:
-
+            Tuple[Tuple[str, str], Tuple[int, int], Tuple[dict, dict, dict, dict], Callable, List[List[Tuple]]]:
+            - Tuple[str, str]: Gloabl WSI Path and loader WSI Path (in most cases identical except for DICOM with OpenSlide)
             - Tuple[int, int]: Number of rows, cols of the WSI at the given level
             - dict: Dictionary with Metadata of the WSI
             - dict[str, Image]: Masks generated during tissue detection stored in dict with keys equals the mask name and values equals the PIL image
@@ -792,18 +876,14 @@ class PreProcessor(object):
                 Keys are the thumbnail names and values are the PIL images.
             - callable: Batch-Processing function performing the actual patch-extraction task
             - List[List[Tuple]]: Divided List with batches of batch-size. Each batch-element contains the row, col position of a patch together with bg-ratio.
-
-        Todo:
-            * TODO: Check if this works out for non-GPU devices
-            * TODO: Class documentation link
         """
         logger.info(f"Computing patches for {wsi_file.name}")
 
-        # load slide (OS and CuImage/OS)
-        if self.config.wsi_extension == "dcm":
-            slide = DicomSlide(wsi_file)
-        else:
-            slide = OpenSlide(str(wsi_file))
+        # set hardware
+        wsi_file_global, wsi_file = self._set_hardware(
+            wsi_file, self.config.hardware_selection
+        )
+        slide = self.slide_metadata_loader(str(wsi_file))
         slide_cu = self.image_loader(str(wsi_file))
 
         slide_mpp = None
@@ -877,7 +957,7 @@ class PreProcessor(object):
                     slide_properties["mpp"]
                     * self.rescaling_factor
                     * self.config.downsample
-                )  # TODO: should it be divided by 2 or not?
+                )  # should it be divided by 2 or not?
             else:
                 resulting_mpp = slide_properties["mpp"] * self.config.downsample
         # target mag has precedence before downsample!
@@ -999,8 +1079,11 @@ class PreProcessor(object):
             "level": level,
         }
 
-        logger.info(f"{wsi_file.name}: Processing {len(interesting_coords)} patches.")
+        logger.info(
+            f"{wsi_file_global.name}: Processing {len(interesting_coords)} patches."
+        )
         return (
+            (wsi_file_global, wsi_file),
             (n_cols, n_rows),
             (wsi_metadata, mask_images, mask_images_annotations, thumbnails),
             (list(interesting_coords), level, polygons_downsampled, region_labels),
@@ -1010,6 +1093,7 @@ class PreProcessor(object):
         self,
         batch: List[Tuple[int, int, float]],
         wsi_file: Union[Path, str],
+        wsi_file_global: Union[Path, str],
         wsi_metadata: dict,
         level: int,
         polygons: List[Polygon],
@@ -1024,7 +1108,8 @@ class PreProcessor(object):
 
         Args:
             batch (List[Tuple[int, int, float]]): A batch of patch coordinates (row, col, backgropund ratio)
-            wsi_file (Union[Path, str]): Path to the WSI file from which the patches should be extracted from
+            wsi_file (Union[Path, str]): Path to file that is handover to the slide loader
+            wsi_file_global (Union[Path, str]): Path to the WSI file from which the patches should be extracted from
             wsi_metadata (dict): Dictionary with important WSI metadata
             level (int): The tile level for sampling.
             polygons (List[Polygon]): Annotations of this WSI as a list of polygons -> on reference downsample level
@@ -1037,15 +1122,13 @@ class PreProcessor(object):
             int: Number of processed patches
         """
         logger.debug(f"Started process {multiprocessing.current_process().name}")
-
+        wsi_file_global = Path(wsi_file_global)
+        wsi_file = Path(wsi_file)
         # store context_tiles
         context_tiles = {}
 
         # reload image
-        if self.config.wsi_extension == "dcm":
-            slide = DicomSlide(wsi_file)
-        else:
-            slide = OpenSlide(str(wsi_file))
+        slide = self.slide_metadata_loader(str(wsi_file))
         slide_cu = self.image_loader(str(wsi_file))
 
         tile_size, overlap = patch_to_tile_size(
@@ -1101,8 +1184,8 @@ class PreProcessor(object):
         for row, col, _ in batch:
             pbar.update()
             # set name
-            patch_fname = f"{wsi_file.stem}_{row}_{col}.png"
-            patch_yaml_name = f"{wsi_file.stem}_{row}_{col}.yaml"
+            patch_fname = f"{wsi_file_global.stem}_{row}_{col}.png"
+            patch_yaml_name = f"{wsi_file_global.stem}_{row}_{col}.yaml"
 
             if self.config.context_scales is not None:
                 context_patches = {scale: [] for scale in self.config.context_scales}
@@ -1259,7 +1342,7 @@ class PreProcessor(object):
         logger.info("Computing surrounding patches outside of ROI")
 
         # load slide (OS and CuImage/OS)
-        slide = OpenSlide(str(wsi_file))
+        slide = self.slide_metadata_loader(str(wsi_file))
         slide_cu = self.image_loader(str(wsi_file))
 
         tile_size, overlap = patch_to_tile_size(
@@ -1361,6 +1444,7 @@ class PreProcessor(object):
             wsi_file (Path): Path to WSI file, must be within the dataset
             save_json_path (Union[Path, str]): Path to JSON-File where to Macenko-Vectors should be stored.
         """
+        # TODO: this does not work with dicom currently
         # check input
         assert (
             wsi_file in self.files
@@ -1378,14 +1462,17 @@ class PreProcessor(object):
             min_background_ratio=self.config.min_intersection_ratio,
         )
 
-        ((_, _), (_, _, _, _), (interesting_coords_wsi, _, _, _)) = self._prepare_wsi(
-            wsi_file
-        )
+        (
+            (_, _),
+            (_, _),
+            (_, _, _, _),
+            (interesting_coords_wsi, _, _, _),
+        ) = self._prepare_wsi(wsi_file)
         # convert divided back to batch
         # batch = [item for sublist in divided for item in sublist]
 
         # open slide
-        slide = OpenSlide(str(wsi_file))
+        slide = self.slide_metadata_loader(str(wsi_file))
         slide_cu = self.image_loader(str(wsi_file))
         tile_size, overlap = patch_to_tile_size(
             self.config.patch_size, self.config.patch_overlap

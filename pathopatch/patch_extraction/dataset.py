@@ -28,6 +28,10 @@ from torchvision.transforms.v2 import ToTensor
 from PIL import Image
 from pathopatch.utils.exceptions import WrongParameterException
 from pathopatch.wsi_interfaces.openslide_deepzoom import DeepZoomGeneratorOS
+from pathopatch.wsi_interfaces.wsidicomizer_openslide import (
+    DicomSlide,
+    DeepZoomGeneratorDicom,
+)
 from pathopatch.utils.patch_util import (
     calculate_background_ratio,
     compute_interesting_patches,
@@ -280,20 +284,44 @@ class LivePatchWSIDataset(Dataset):
 
     def _set_hardware(self) -> None:
         """Either load CuCIM (GPU-accelerated) or OpenSlide"""
-        if module_exists("cucim", error="ignore"):
-            self.logger.debug("Using CuCIM")
-            from cucim import CuImage
-
-            from pathopatch.wsi_interfaces.cucim_deepzoom import (
-                DeepZoomGeneratorCucim,
-            )
-
-            self.deepzoomgenerator = DeepZoomGeneratorCucim
-            self.image_loader = CuImage
+        wsi_file = Path(self.config.wsi_path)
+        if wsi_file.is_dir():
+            if len(list(wsi_file.glob("*.dcm"))) != 0:
+                self.logger.debug("Detected dicom files")
+                try:
+                    dcm_files = list(wsi_file.glob("*.dcm"))
+                    dcm_files = [(f, os.path.getsize(f.resolve())) for f in dcm_files]
+                    dcm_files = sorted(dcm_files, key=lambda x: x[1], reverse=True)
+                    OpenSlide(str(dcm_files[0][0]))
+                    wsi_file = dcm_files[0][0]
+                    self.image_loader = OpenSlide
+                    self.deepzoomgenerator = DeepZoomGeneratorOS
+                    self.slide_metadata_loader = OpenSlide
+                except:
+                    try:
+                        DicomSlide(wsi_file)
+                    except Exception as e:
+                        raise e
+                    self.deepzoomgenerator = DeepZoomGeneratorDicom
+                    self.image_loader = DicomSlide
+                    self.slide_metadata_loader = DicomSlide
         else:
-            self.logger.debug("Using OpenSlide")
-            self.deepzoomgenerator = DeepZoomGeneratorOS
-            self.image_loader = OpenSlide
+            if module_exists("cucim", error="ignore"):
+                self.logger.debug("Using CuCIM")
+                from cucim import CuImage
+
+                from pathopatch.wsi_interfaces.cucim_deepzoom import (
+                    DeepZoomGeneratorCucim,
+                )
+
+                self.deepzoomgenerator = DeepZoomGeneratorCucim
+                self.image_loader = CuImage
+                self.slide_metadata_loader = OpenSlide
+            else:
+                self.logger.debug("Using OpenSlide")
+                self.deepzoomgenerator = DeepZoomGeneratorOS
+                self.image_loader = OpenSlide
+                self.slide_metadata_loader = OpenSlide
 
     def _set_tissue_detector(self) -> None:
         """Set up the tissue detection model and transformations.
@@ -364,7 +392,7 @@ class LivePatchWSIDataset(Dataset):
                 * List[Polygon]: List of polygons, downsampled to the target level
                 * List[str]: List of region labels
         """
-        self.slide_openslide = OpenSlide(str(self.config.wsi_path))
+        self.slide_openslide = self.slide_metadata_loader(str(self.config.wsi_path))
         self.slide = self.image_loader(str(self.config.wsi_path))
 
         if (

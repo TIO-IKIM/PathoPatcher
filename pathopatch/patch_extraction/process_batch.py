@@ -4,7 +4,7 @@
 # @ Fabian Hörst, fabian.hoerst@uk-essen.de
 # Institute for Artifical Intelligence in Medicine,
 # University Medicine Essen
-
+from warnings import deprecated
 
 import multiprocessing
 from pathlib import Path
@@ -28,6 +28,7 @@ from pathopatch.utils.tools import module_exists
 from pathopatch.wsi_interfaces.openslide_deepzoom import DeepZoomGeneratorOS
 
 
+@deprecated("Do not use this anymore")
 def process_batch(
     batch: List[Tuple[int, int, float]],
     *,

@@ -148,7 +148,7 @@ class PreProcessingConfig(BaseModel):
         apply_prefilter (bool, optional): Pre-extraction mask filtering to remove marker from mask before applying otsu. Defaults to False.
         log_path (str, optional): Path where log files should be stored. Otherwise, log files are stored in the output folder. Defaults to None.
         log_level (str, optional): Set the logging level. Defaults to "info".
-        hardware_selection (str, optional): Select hardware device (just if available, otherwise always cucim). Defaults to "cucim".
+        hardware_selection (str, optional): Select hardware device (just if available, otherwise always cucim). Defaults to None.
         wsi_properties (dict, optional): Dictionary with manual WSI metadata, but just applies if metadata cannot be derived from OpenSlide (e.g., for .tiff files). Supported keys are slide_mpp and magnification
 
     Raises:
@@ -209,7 +209,7 @@ class PreProcessingConfig(BaseModel):
     # other
     log_path: Optional[str]
     log_level: Optional[str] = "info"
-    hardware_selection: Optional[str] = "cucim"
+    hardware_selection: Optional[str] = None
     wsi_properties: Optional[dict]
 
     def __init__(__pydantic_self__, **data: Any) -> None:
@@ -577,8 +577,8 @@ class PreProcessingParser(ABCParser):
         parser.add_argument(
             "--hardware_selection",
             type=str,
-            choices=["cucim", "openslide"],
-            help="Select hardware device (just if available, otherwise always cucim). Defaults to cucim.",
+            choices=["cucim", "openslide", "wsidicom"],
+            help="Select hardware device (just if available, otherwise always cucim). Defaults to None.",
         )
         parser.add_argument(
             "--wsi_magnification",
