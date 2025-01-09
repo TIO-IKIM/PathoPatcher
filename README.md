@@ -4,6 +4,7 @@
 <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=Pytorch&logoColor=white"/></a>
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![CodeFactor](https://www.codefactor.io/repository/github/tio-ikim/pathopatcher/badge)](https://www.codefactor.io/repository/github/tio-ikim/pathopatcher)
+[![PyPI Downloads](https://static.pepy.tech/badge/pathopatch)](https://pepy.tech/projects/pathopatch)
 ___
 
 # PathoPatch:
