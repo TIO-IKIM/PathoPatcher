@@ -682,13 +682,17 @@ class PreProcessingParser(ABCParser):
         }
         for k, v in config_repr_str.items():
             config_repr[k] = v
+        # convert the string to Path
+        log_path = Path(self.preprocessing.log_path)
+
+        #using the / to join paths
+        config_file_path = log_path / "config.yaml"
+
         # store in log directory
-        with open(self.preprocessconfig.log_path / "config.yaml", "w") as yaml_file:
+        with open(config_file_path, "w") as yaml_file:
             yaml.dump(config_repr, yaml_file, sort_keys=False)
 
-        self.logger.debug(
-            f"Stored config under: {str(self.preprocessconfig.log_path / 'config.yaml')}"
-        )
+        self.logger.info(f"Stored config under: {config_file_path}")
 
 
 class MacenkoYamlConfig(PreProcessingYamlConfig):
