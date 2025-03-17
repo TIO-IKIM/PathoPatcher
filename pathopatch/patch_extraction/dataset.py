@@ -4,11 +4,6 @@
 # @ Fabian Hörst, fabian.hoerst@uk-essen.de
 # Institute for Artifical Intelligence in Medicine,
 # University Medicine Essen
-import sys
-
-
-sys.path.append("/Users/fhoerst/Fabian-Projekte/Preprocessing/PathoPatcher")
-
 import logging
 import os
 import random
@@ -216,6 +211,7 @@ class LivePatchWSIDataset(Dataset):
             detector_device (str): Device for the detector model
             detector_model (torch.nn.Module): Detector model for filtering patches
             detector_transforms (Callable): Transforms to apply to the detector model
+            mask_images (List[PIL.Image.Image]): List of mask images
 
         Methods:
             __init__(slide_processor_config: PreProcessingDatasetConfig, logger: logging.Logger = None) -> None:
@@ -280,6 +276,7 @@ class LivePatchWSIDataset(Dataset):
             self.curr_wsi_level,
             self.polygons,
             self.region_labels,
+            self.mask_images,
         ) = self._prepare_slide()
 
     def _set_hardware(self) -> None:
@@ -374,7 +371,9 @@ class LivePatchWSIDataset(Dataset):
 
     def _prepare_slide(
         self,
-    ) -> Tuple[List[Tuple[int, int, float]], int, List[Polygon], List[str]]:
+    ) -> Tuple[
+        List[Tuple[int, int, float]], int, List[Polygon], List[str], List[Image.Image]
+    ]:
         """Prepare the slide for patch extraction
 
         This method prepares the slide for patch extraction by loading the slide, extracting metadata,
@@ -391,6 +390,7 @@ class LivePatchWSIDataset(Dataset):
                 * int: Level of the slide
                 * List[Polygon]: List of polygons, downsampled to the target level
                 * List[str]: List of region labels
+                * List[Image.Image]: List of mask images
         """
         self.slide_openslide = self.slide_metadata_loader(str(self.config.wsi_path))
         self.slide = self.image_loader(str(self.config.wsi_path))
@@ -538,7 +538,7 @@ class LivePatchWSIDataset(Dataset):
         else:
             (
                 interesting_coords,
-                _,
+                mask_images,
                 _,
             ) = compute_interesting_patches(
                 slide=self.slide_openslide,
@@ -576,9 +576,25 @@ class LivePatchWSIDataset(Dataset):
             "level": level,
         }
 
-        return list(interesting_coords), level, polygons_downsampled, region_labels
+        return (
+            list(interesting_coords),
+            level,
+            polygons_downsampled,
+            region_labels,
+            mask_images,
+        )
 
-    def _get_wsi_annotations(self, downsample: int):  # TODO: docstring
+    def _get_wsi_annotations(
+        self, downsample: int
+    ) -> Tuple[List[str], List[Polygon], List[Polygon], List[Polygon]]:
+        """Get the annotations for the WSI
+
+        Args:
+            downsample (int): Downsample factor
+
+        Returns:
+            Tuple[List[str], List[Polygon], List[Polygon], List[Polygon]]: Tuple containing the region labels, polygons, downsampled polygons, and tissue region
+        """
         region_labels: List[str] = []
         polygons: List[Polygon] = []
         polygons_downsampled: List[Polygon] = []

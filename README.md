@@ -40,6 +40,10 @@ ___
 The package can be found here: https://pypi.org/project/pathopatch/
 Installation: `pip install pathopatch`
 
+### Troubleshooting
+- **torch**: If you get problems with torch, install it accordingly for your setup by follow this instructions: https://pytorch.org/get-started/previous-versions/. After you have installed pytorch, some packages might have get an update, therefore please reinstall pathopatch: `pip install --force-reinstall pathopatch`
+
+
 ### Development/from source
 1. Clone the repository:
 2. Create a conda environment with Python 3.10.12 version and install conda requirements: `conda env create -f environment.yaml -vv`. You can change the environment name by editing the `name` tag in the environment.yaml file.
