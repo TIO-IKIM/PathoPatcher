@@ -36,7 +36,7 @@ ___
       </details>
 2. Openslide python: `pip install openslide-python`
 3. Optional for speedup:
-   
+
     - We recommend the following procedure to achieve to best speed-up:
         1. Install cupy for your cuda version, E.g., `pip install cupy-cuda12x` (CUDA >12.x) or `pip install cupy-cuda11x` (CUDA 11.0-11.8)
         2. Install cuCIM via pip: `pip install cucim`. We used the following version: `pip install cucim==23.6.0`
