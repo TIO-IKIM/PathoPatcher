@@ -211,7 +211,7 @@ class LivePatchWSIDataset(Dataset):
             detector_device (str): Device for the detector model
             detector_model (torch.nn.Module): Detector model for filtering patches
             detector_transforms (Callable): Transforms to apply to the detector model
-            mask_images (List[PIL.Image.Image]): List of mask images
+            mask_images (dict[str, PIL.Image.Image]): Dictionary of mask images for the patches, key is the name and value is the mask image
 
         Methods:
             __init__(slide_processor_config: PreProcessingDatasetConfig, logger: logging.Logger = None) -> None:
@@ -250,6 +250,7 @@ class LivePatchWSIDataset(Dataset):
         self.polygons: List[Polygon]
         self.region_labels: List[str]
         self.transforms = transforms
+        self.mask_images: dict[str, Image.Image]
 
         # filter
         self.detector_device: str
@@ -372,7 +373,11 @@ class LivePatchWSIDataset(Dataset):
     def _prepare_slide(
         self,
     ) -> Tuple[
-        List[Tuple[int, int, float]], int, List[Polygon], List[str], List[Image.Image]
+        List[Tuple[int, int, float]],
+        int,
+        List[Polygon],
+        List[str],
+        dict[str, Image.Image],
     ]:
         """Prepare the slide for patch extraction
 
@@ -390,7 +395,7 @@ class LivePatchWSIDataset(Dataset):
                 * int: Level of the slide
                 * List[Polygon]: List of polygons, downsampled to the target level
                 * List[str]: List of region labels
-                * List[Image.Image]: List of mask images
+                * dict[str, Image.Image]: Dictionary of mask images for the patches, key is the name and value is the mask image
         """
         self.slide_openslide = self.slide_metadata_loader(str(self.config.wsi_path))
         self.slide = self.image_loader(str(self.config.wsi_path))
@@ -800,7 +805,7 @@ class LivePatchWSIDataloader:
             if len(patches) > 1:
                 patches = [torch.tensor(f) for f in patches]
                 patches = torch.stack(patches)
-            else:
+            elif len(patches) == 1:
                 patches = torch.tensor(patches[0][None, ...])
             return patches, metadata, masks
         else:
