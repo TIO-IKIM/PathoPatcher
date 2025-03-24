@@ -12,7 +12,6 @@ description = "PathoPatch - Accelerating Artificial Intelligence Based Whole Sli
 readme = "docs/README_pypi.md"
 requires-python = ">=3.9"
 keywords = ["python", "pathopatch"]
-license = {text = "CC BY-NC-SA 4.0"}
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Education",
@@ -22,6 +21,7 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Other",
 ]
+license = { text = "CC-BY-ND-4.0" }
 dependencies = [
     "Pillow>=9.5.0",
     "PyYAML",
@@ -57,5 +57,6 @@ annotation_conversion = "pathopatch.annotation_conversion:main"
 macenko_vector_generation = "pathopatch.macenko_vector_generation:main"
 
 [tool.setuptools]
+license-files = []  # Disable automatic license file inclusion
 packages = {find = {exclude = ["tests", "tests.*"]}}
 package-data = {"pathopatch" = ["data/*"]}
