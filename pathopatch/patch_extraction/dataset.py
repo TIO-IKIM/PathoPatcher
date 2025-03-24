@@ -303,6 +303,21 @@ class LivePatchWSIDataset(Dataset):
                     self.deepzoomgenerator = DeepZoomGeneratorDicom
                     self.image_loader = DicomSlide
                     self.slide_metadata_loader = DicomSlide
+        elif wsi_file.suffix == ".dcm":
+            self.logger.debug("Detected dicom files")
+            try:
+                OpenSlide(str(wsi_file))
+                self.image_loader = OpenSlide
+                self.deepzoomgenerator = DeepZoomGeneratorOS
+                self.slide_metadata_loader = OpenSlide
+            except:
+                try:
+                    DicomSlide(wsi_file)
+                except Exception as e:
+                    raise e
+                self.deepzoomgenerator = DeepZoomGeneratorDicom
+                self.image_loader = DicomSlide
+                self.slide_metadata_loader = DicomSlide
         else:
             if module_exists("cucim", error="ignore"):
                 self.logger.debug("Using CuCIM")

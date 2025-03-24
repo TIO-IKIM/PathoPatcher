@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pathopatch"
-version = "1.0.4"
+version = "1.0.6"
 authors = [
     {name = "Fabian Hörst", email = "fabian.hoerst@uk-essen.de"},
 ]
