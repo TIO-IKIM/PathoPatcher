@@ -1211,6 +1211,7 @@ class PreProcessor(object):
                 patch_mask = np.zeros(
                     (tile_size, tile_size), dtype=np.uint8
                 )  # TODO: continue missing?
+                continue
             else:
                 intersected_labels, ratio, patch_mask = get_intersected_labels(
                     tile_size=tile_size,

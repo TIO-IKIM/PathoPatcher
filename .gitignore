@@ -33,3 +33,5 @@ test_database/dicom_leica_anonymized
 test_database/dicom_wsidicomizer
 mask_ihc.ipynb
 test_output
+debug*
+idc*

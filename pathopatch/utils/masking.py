@@ -238,8 +238,12 @@ def apply_otsu_thresholding(tile: np.ndarray) -> np.ndarray:
     otsu_masking = masked_image_gray < thresh
     # improving mask
     otsu_masking = sk_morphology.remove_small_objects(otsu_masking, 60)
-    otsu_masking = sk_morphology.dilation(otsu_masking, sk_morphology.square(12))
-    otsu_masking = sk_morphology.closing(otsu_masking, sk_morphology.square(5))
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore", category=FutureWarning, message=".*square.*deprecated.*"
+        )
+        otsu_masking = sk_morphology.dilation(otsu_masking, sk_morphology.square(12))
+        otsu_masking = sk_morphology.closing(otsu_masking, sk_morphology.square(5))
     otsu_masking = sk_morphology.remove_small_holes(otsu_masking, 250)
     tile = mask_rgb(tile, otsu_masking).astype(np.uint8)
 

@@ -683,9 +683,9 @@ class PreProcessingParser(ABCParser):
         for k, v in config_repr_str.items():
             config_repr[k] = v
         # convert the string to Path
-        log_path = Path(self.preprocessing.log_path)
+        log_path = Path(self.preprocessconfig.log_path)
 
-        #using the / to join paths
+        # using the / to join paths
         config_file_path = log_path / "config.yaml"
 
         # store in log directory
