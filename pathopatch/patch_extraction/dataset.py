@@ -291,7 +291,7 @@ class LivePatchWSIDataset(Dataset):
                     dcm_files = [(f, os.path.getsize(f.resolve())) for f in dcm_files]
                     dcm_files = sorted(dcm_files, key=lambda x: x[1], reverse=True)
                     OpenSlide(str(dcm_files[0][0]))
-                    wsi_file = dcm_files[0][0]
+                    self.config.wsi_path = dcm_files[0][0]
                     self.image_loader = OpenSlide
                     self.deepzoomgenerator = DeepZoomGeneratorOS
                     self.slide_metadata_loader = OpenSlide
